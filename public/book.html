@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Chi Tiết Truyện - WebTruyện</title>
+<meta name="description" id="meta-desc" content="Đọc truyện online miễn phí tại WebTruyện. Cập nhật nhanh, đầy đủ chương.">
+<meta property="og:site_name" content="WebTruyện">
+<meta property="og:type" content="book">
+<meta property="og:title" id="og-title" content="Chi Tiết Truyện - WebTruyện">
+<meta property="og:description" id="og-desc" content="Đọc truyện online miễn phí tại WebTruyện">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="stylesheet" href="assets/css/style.css">
+<link rel="stylesheet" href="assets/css/book.css">
+<link rel="stylesheet" href="assets/css/profile.css">
+</head>
+<body class="book-detail-page">
+
+<header class="mini-header">
+  <div class="mini-header-inner">
+    <a href="index.html" class="mini-logo">🐧 WebTruyện</a>
+    <a href="profile.html" class="mini-profile-link" title="Tủ sách">📚 Tủ Sách</a>
+    <div class="mini-search-box">
+      <input type="text" placeholder="Tìm kiếm truyện..." id="miniSearchInput">
+      <button onclick="miniSearch()">Tìm</button>
+    </div>
+  </div>
+</header>
+
+<div class="book-detail-wrap">
+
+  <!-- Breadcrumb -->
+  <div class="breadcrumb">
+    <a href="index.html">Trang Chủ</a>
+    <span>›</span>
+    <span id="breadcrumb-genre">Truyện</span>
+    <span>›</span>
+    <span id="breadcrumb-title">...</span>
+  </div>
+
+  <!-- Top: cover + info -->
+  <div class="book-detail-top">
+    <div class="book-cover-box">
+      <div class="book-cover-box-inner" id="detail-cover-bg">
+        <img id="detail-cover-img" src="" alt="" loading="lazy" onerror="this.style.display='none'">
+      </div>
+    </div>
+    <div class="book-detail-info">
+      <h1 class="detail-title" id="detail-title">Đang tải...</h1>
+      <div class="detail-meta-row">
+        <span class="detail-author">✍ <span id="detail-author">—</span></span>
+        <span class="detail-status" id="detail-status-badge">Đang ra</span>
+      </div>
+      <div class="detail-genres" id="detail-genres"></div>
+      <div class="detail-stats">
+        <div class="stat-item">
+          <div class="stat-num" id="stat-chapters">—</div>
+          <div class="stat-label">Chương</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-num" id="stat-views">—</div>
+          <div class="stat-label">Lượt đọc</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-num" id="stat-rating">—</div>
+          <div class="stat-label">Đánh giá</div>
+        </div>
+      </div>
+      <div class="detail-stars" id="detail-stars"></div>
+      <div class="detail-actions">
+        <a class="btn-action btn-read-first" id="btn-read-first" href="#">📖 Đọc Từ Đầu</a>
+        <a class="btn-action btn-read-continue" id="btn-read-continue" href="#" style="display:none">▶ Đọc Tiếp Ch.<span id="continue-ch-num">1</span></a>
+        <button class="btn-action btn-bookmark" id="btn-bookmark">🔖 Theo Dõi</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Description -->
+  <div class="book-section">
+    <div class="book-section-header">Giới Thiệu</div>
+    <div class="book-description" id="book-description">Đang tải...</div>
+  </div>
+
+  <!-- Chapter list -->
+  <div class="book-section">
+    <div class="book-section-header">
+      Danh Sách Chương
+      <span class="chapter-count-badge" id="chapter-count-badge"></span>
+    </div>
+    <div class="chapter-grid" id="chapter-grid"></div>
+    <button class="btn-load-more" id="btn-load-more" style="display:none">Xem thêm chương ▼</button>
+  </div>
+
+  <!-- Similar books -->
+  <div class="book-section">
+    <div class="book-section-header">📖 Có Thể Bạn Thích</div>
+    <div class="similar-grid" id="similar-grid"></div>
+  </div>
+
+</div>
+
+<footer class="mini-footer">
+  <div class="mini-footer-inner">
+    <a href="index.html">Trang Chủ</a> ·
+    <a href="#">Thể Loại</a> ·
+    <a href="#">Liên Hệ</a>
+    <div class="mini-footer-copy">© 2024 WebTruyện</div>
+  </div>
+</footer>
+
+<script src="assets/js/similar.js"></script>
+<script src="assets/js/book.js"></script>
+</body>
+</html>

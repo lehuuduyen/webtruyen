@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tủ Sách Của Tôi - WebTruyện</title>
+<meta name="description" content="Tủ sách cá nhân - Quản lý truyện đang đọc, yêu thích và lịch sử đọc truyện của bạn.">
+<link rel="stylesheet" href="assets/css/style.css">
+<link rel="stylesheet" href="assets/css/book.css">
+<link rel="stylesheet" href="assets/css/profile.css">
+</head>
+<body class="book-detail-page profile-page">
+
+<header class="mini-header">
+  <div class="mini-header-inner">
+    <a href="index.html" class="mini-logo">🐧 WebTruyện</a>
+    <div class="mini-search-box">
+      <input type="text" placeholder="Tìm kiếm truyện..." id="miniSearchInput" autocomplete="off">
+      <button onclick="miniSearch()">Tìm</button>
+    </div>
+  </div>
+</header>
+
+<!-- Profile Hero -->
+<div class="profile-hero">
+  <div class="profile-hero-inner">
+    <div class="profile-avatar" id="profile-avatar">ND</div>
+    <div class="profile-info">
+      <div class="profile-name">Người Đọc</div>
+      <div class="profile-since">Thành viên từ hôm nay</div>
+    </div>
+    <div class="profile-stats-row">
+      <div class="profile-stat">
+        <span class="pstat-num" id="pstat-reading">0</span>
+        <span class="pstat-label">Đang đọc</span>
+      </div>
+      <div class="profile-stat">
+        <span class="pstat-num" id="pstat-bookmark">0</span>
+        <span class="pstat-label">Yêu thích</span>
+      </div>
+      <div class="profile-stat">
+        <span class="pstat-num" id="pstat-chapters">0</span>
+        <span class="pstat-label">Chương đọc</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Tabs -->
+<div class="profile-tabs-wrap">
+  <div class="profile-tabs">
+    <button class="profile-tab active" data-tab="reading">📖 Đang Đọc</button>
+    <button class="profile-tab" data-tab="bookmark">❤️ Yêu Thích</button>
+    <button class="profile-tab" data-tab="history">🕐 Lịch Sử</button>
+  </div>
+</div>
+
+<!-- Tab content -->
+<div class="profile-content-wrap">
+
+  <!-- Đang đọc tab -->
+  <div class="profile-tab-content active" id="tab-reading">
+    <div class="tab-toolbar">
+      <span class="tab-count" id="reading-count"></span>
+      <button class="tab-clear-btn" onclick="clearAll('reading-history')">Xóa tất cả</button>
+    </div>
+    <div class="profile-book-grid" id="reading-grid"></div>
+    <div class="empty-state" id="reading-empty" style="display:none">
+      <div class="empty-icon">📚</div>
+      <div class="empty-text">Bạn chưa đọc truyện nào</div>
+      <a href="index.html" class="empty-cta">Khám phá truyện hay</a>
+    </div>
+  </div>
+
+  <!-- Yêu thích tab -->
+  <div class="profile-tab-content" id="tab-bookmark">
+    <div class="tab-toolbar">
+      <span class="tab-count" id="bookmark-count"></span>
+      <button class="tab-clear-btn" onclick="clearAll('bookmarks')">Xóa tất cả</button>
+    </div>
+    <div class="profile-book-grid" id="bookmark-grid"></div>
+    <div class="empty-state" id="bookmark-empty" style="display:none">
+      <div class="empty-icon">💙</div>
+      <div class="empty-text">Chưa có truyện yêu thích</div>
+      <a href="index.html" class="empty-cta">Tìm truyện để theo dõi</a>
+    </div>
+  </div>
+
+  <!-- Lịch sử tab -->
+  <div class="profile-tab-content" id="tab-history">
+    <div class="tab-toolbar">
+      <span class="tab-count" id="history-count"></span>
+      <button class="tab-clear-btn" onclick="clearAll('reading-history')">Xóa lịch sử</button>
+    </div>
+    <ul class="history-list" id="history-list"></ul>
+    <div class="empty-state" id="history-empty" style="display:none">
+      <div class="empty-icon">🕐</div>
+      <div class="empty-text">Lịch sử đọc trống</div>
+      <a href="index.html" class="empty-cta">Bắt đầu đọc ngay</a>
+    </div>
+  </div>
+
+</div>
+
+<footer class="mini-footer">
+  <div class="mini-footer-inner">
+    <a href="index.html">Trang Chủ</a> ·
+    <a href="#">Thể Loại</a> ·
+    <a href="#">Liên Hệ</a>
+    <div class="mini-footer-copy">© 2024 WebTruyện</div>
+  </div>
+</footer>
+
+<script src="assets/js/profile.js"></script>
+</body>
+</html>

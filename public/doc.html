@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Đọc Truyện - WebTruyện</title>
+<meta name="description" content="Đọc truyện online miễn phí tại WebTruyện - Cập nhật nhanh, giao diện đẹp, thân thiện mobile.">
+<meta property="og:site_name" content="WebTruyện">
+<meta property="og:type" content="article">
+<meta property="og:title" id="og-title" content="Đọc Truyện - WebTruyện">
+<meta property="og:description" id="og-desc" content="Đọc truyện online miễn phí tại WebTruyện">
+<meta name="twitter:card" content="summary">
+<link rel="stylesheet" href="assets/css/style.css">
+<link rel="stylesheet" href="assets/css/doc.css">
+<link rel="stylesheet" href="assets/css/profile.css">
+</head>
+<body class="doc-page">
+
+<!-- Top bar -->
+<div class="doc-topbar">
+  <a href="index.html" class="doc-back-btn">&#8592; Trang Chủ</a>
+  <div class="doc-topbar-title" id="doc-topbar-title">WebTruyện</div>
+  <div class="doc-topbar-actions">
+    <a href="profile.html" class="doc-btn-icon" title="Tủ sách" style="text-decoration:none">📚</a>
+    <button class="doc-btn-icon" id="btn-font" title="Cỡ chữ">A</button>
+    <button class="doc-btn-icon" id="btn-theme" title="Giao diện">☀</button>
+  </div>
+</div>
+
+<!-- Book / Chapter header -->
+<div class="doc-header">
+  <div class="doc-header-inner">
+    <div class="doc-book-name" id="doc-book-name">Đang tải...</div>
+    <div class="doc-chapter-name" id="doc-chapter-name">Chương 1</div>
+  </div>
+</div>
+
+<!-- Reading content -->
+<div class="doc-wrap">
+  <div class="doc-content" id="doc-content">
+    <p class="loading-text">Đang tải nội dung...</p>
+  </div>
+
+  <!-- Similar books -->
+  <div class="similar-section">
+    <div class="similar-section-title">📖 Có Thể Bạn Thích</div>
+    <div class="similar-grid" id="similar-grid"></div>
+  </div>
+</div>
+
+<!-- Bottom navigation bar -->
+<div class="doc-nav-bar">
+  <button class="doc-nav-btn" id="btn-prev">&#9664; Chương Trước</button>
+  <button class="doc-nav-btn doc-nav-center" id="btn-chapters">&#9776; Danh Sách</button>
+  <button class="doc-nav-btn" id="btn-next">Chương Tiếp &#9654;</button>
+</div>
+
+<!-- Chapter list modal -->
+<div class="chapter-modal-overlay" id="chapter-modal-overlay">
+  <div class="chapter-modal">
+    <div class="chapter-modal-header">
+      <span class="chapter-modal-title">Danh Sách Chương</span>
+      <button class="chapter-modal-close" id="chapter-modal-close">&#10005;</button>
+    </div>
+    <div class="chapter-modal-body">
+      <ul class="chapter-list" id="chapter-list"></ul>
+    </div>
+  </div>
+</div>
+
+<!-- Font size panel -->
+<div class="font-panel" id="font-panel">
+  <div class="font-panel-title">Cỡ chữ</div>
+  <div class="font-panel-btns">
+    <button class="font-size-btn" data-size="small">A nhỏ</button>
+    <button class="font-size-btn active" data-size="medium">A vừa</button>
+    <button class="font-size-btn" data-size="large">A lớn</button>
+    <button class="font-size-btn" data-size="xlarge">A to</button>
+  </div>
+  <div class="font-panel-title" style="margin-top:12px">Font chữ</div>
+  <div class="font-panel-btns">
+    <button class="font-family-btn active" data-font="serif">Có chân</button>
+    <button class="font-family-btn" data-font="sans">Không chân</button>
+  </div>
+</div>
+
+<script src="assets/js/similar.js"></script>
+<script src="assets/js/doc.js"></script>
+</body>
+</html>

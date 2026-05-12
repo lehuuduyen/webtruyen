@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dashboard Admin - WebTruyện</title>
+<link rel="stylesheet" href="admin.css">
+</head>
+<body class="dashboard-page">
+
+<!-- Sidebar -->
+<aside class="sidebar" id="sidebar">
+  <div class="sidebar-logo">
+    <span>🐧</span>
+    <span class="sidebar-logo-text">WebTruyện Admin</span>
+  </div>
+  <nav class="sidebar-nav">
+    <a href="#" class="nav-item active" data-tab="overview">
+      <span class="nav-icon">📊</span><span>Tổng Quan</span>
+    </a>
+    <a href="#" class="nav-item" data-tab="books">
+      <span class="nav-icon">📚</span><span>Quản Lý Sách</span>
+    </a>
+    <a href="#" class="nav-item" data-tab="chapters">
+      <span class="nav-icon">📖</span><span>Quản Lý Chương</span>
+    </a>
+    <a href="#" class="nav-item" data-tab="categories">
+      <span class="nav-icon">🏷️</span><span>Danh Mục</span>
+    </a>
+    <a href="#" class="nav-item" data-tab="settings">
+      <span class="nav-icon">⚙️</span><span>Cài Đặt</span>
+    </a>
+  </nav>
+  <div class="sidebar-bottom">
+    <a href="../index.html" target="_blank" class="nav-item">
+      <span class="nav-icon">🌐</span><span>Xem Website</span>
+    </a>
+    <button class="nav-item logout-btn" id="logoutBtn">
+      <span class="nav-icon">🚪</span><span>Đăng Xuất</span>
+    </button>
+  </div>
+</aside>
+
+<!-- Mobile sidebar toggle -->
+<button class="sidebar-toggle" id="sidebarToggle">☰</button>
+
+<!-- Main content -->
+<main class="main-content">
+  <div class="topbar">
+    <div class="topbar-title" id="topbar-title">Tổng Quan</div>
+    <div class="topbar-user">
+      <span class="user-badge" id="user-badge">👤 admin</span>
+    </div>
+  </div>
+
+  <!-- ===== OVERVIEW TAB ===== -->
+  <div class="tab-content active" id="tab-overview">
+    <div class="stats-grid">
+      <div class="stat-card blue">
+        <div class="stat-icon">📚</div>
+        <div class="stat-info">
+          <div class="stat-num" id="stat-books">0</div>
+          <div class="stat-label">Tổng Truyện</div>
+        </div>
+      </div>
+      <div class="stat-card green">
+        <div class="stat-icon">📖</div>
+        <div class="stat-info">
+          <div class="stat-num" id="stat-chapters-total">0</div>
+          <div class="stat-label">Tổng Chương</div>
+        </div>
+      </div>
+      <div class="stat-card orange">
+        <div class="stat-icon">🔄</div>
+        <div class="stat-info">
+          <div class="stat-num" id="stat-ongoing">0</div>
+          <div class="stat-label">Đang Ra</div>
+        </div>
+      </div>
+      <div class="stat-card purple">
+        <div class="stat-icon">✅</div>
+        <div class="stat-info">
+          <div class="stat-num" id="stat-complete">0</div>
+          <div class="stat-label">Hoàn Thành</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="content-card">
+      <div class="card-header">
+        <h3>Truyện Mới Thêm</h3>
+        <button class="btn-sm btn-primary" onclick="switchTab('books')">+ Thêm Sách</button>
+      </div>
+      <table class="data-table" id="overview-table">
+        <thead>
+          <tr><th>#</th><th>Tên Truyện</th><th>Tác Giả</th><th>Chương</th><th>Trạng Thái</th><th>Ngày Thêm</th></tr>
+        </thead>
+        <tbody id="overview-tbody"></tbody>
+      </table>
+      <div class="empty-msg" id="overview-empty">Chưa có truyện nào. <a href="#" onclick="switchTab('books')">Thêm ngay →</a></div>
+    </div>
+  </div>
+
+  <!-- ===== BOOKS TAB ===== -->
+  <div class="tab-content" id="tab-books">
+    <div class="tab-toolbar">
+      <div class="search-filter">
+        <input type="text" id="book-search" placeholder="🔍 Tìm truyện...">
+        <select id="book-filter">
+          <option value="all">Tất cả</option>
+          <option value="ongoing">Đang ra</option>
+          <option value="complete">Hoàn thành</option>
+        </select>
+      </div>
+      <button class="btn-primary" id="addBookBtn">+ Thêm Sách Mới</button>
+    </div>
+
+    <div class="content-card">
+      <table class="data-table" id="books-table">
+        <thead>
+          <tr><th>STT</th><th>Bìa</th><th>Tên Truyện</th><th>Tác Giả</th><th>Thể Loại</th><th>Chương</th><th>Trạng Thái</th><th>Thao Tác</th></tr>
+        </thead>
+        <tbody id="books-tbody"></tbody>
+      </table>
+      <div class="empty-msg" id="books-empty" style="display:none">Chưa có truyện nào được thêm.</div>
+    </div>
+  </div>
+
+  <!-- ===== CHAPTERS TAB ===== -->
+  <div class="tab-content" id="tab-chapters">
+    <div class="tab-toolbar">
+      <div class="book-search-select" id="book-search-select">
+        <div class="bss-input-wrap">
+          <input type="text" id="bss-input" placeholder="🔍 Tìm và chọn truyện..." autocomplete="off">
+          <button class="bss-clear" id="bss-clear" title="Bỏ chọn">✕</button>
+        </div>
+        <div class="bss-dropdown" id="bss-dropdown"></div>
+      </div>
+      <button class="btn-primary" id="addChapterBtn" disabled>+ Thêm Chương</button>
+    </div>
+
+    <div class="chapter-layout">
+      <div class="content-card chapter-list-card">
+        <div class="card-header"><h3>Danh Sách Chương</h3></div>
+        <div id="chapter-list-wrap">
+          <div class="empty-msg">Chọn truyện để xem danh sách chương.</div>
+        </div>
+      </div>
+
+      <div class="content-card chapter-form-card" id="chapter-form-card" style="display:none">
+        <div class="card-header">
+          <h3 id="chapter-form-title">Thêm Chương Mới</h3>
+          <button class="btn-sm" id="cancelChapterBtn">Hủy</button>
+        </div>
+        <form id="chapterForm">
+          <div class="form-row">
+            <div class="form-group">
+              <label>Số chương *</label>
+              <input type="number" id="ch-num" min="1" placeholder="1" required>
+            </div>
+            <div class="form-group">
+              <label>Tiêu đề chương *</label>
+              <input type="text" id="ch-title" placeholder="Khởi Đầu Mới" required>
+            </div>
+          </div>
+          <div class="form-group">
+            <label>Nội dung chương *</label>
+            <textarea id="ch-content" rows="14" placeholder="Nhập nội dung chương tại đây..." required></textarea>
+          </div>
+          <div class="form-actions">
+            <button type="submit" class="btn-primary">💾 Lưu Chương</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== CATEGORIES TAB ===== -->
+  <div class="tab-content" id="tab-categories">
+    <div class="tab-toolbar">
+      <div class="search-filter">
+        <input type="text" id="cat-search" placeholder="🔍 Tìm danh mục...">
+      </div>
+      <button class="btn-primary" id="addCategoryBtn">+ Thêm Danh Mục</button>
+    </div>
+    <div class="content-card">
+      <div class="card-header">
+        <h3>Danh Sách Danh Mục</h3>
+        <div style="font-size:12px;color:#888">Bật <b>Trang Chủ</b> ở danh mục gốc để hiển thị danh mục + truyện con trên homepage</div>
+      </div>
+      <div id="category-tree" style="padding:4px 0">
+        <div class="empty-msg" id="category-empty">Chưa có danh mục nào. Nhấn "+ Thêm Danh Mục".</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== SETTINGS TAB ===== -->
+  <div class="tab-content" id="tab-settings">
+    <div class="settings-grid">
+      <div class="content-card">
+        <div class="card-header"><h3>🔐 Đổi Mật Khẩu</h3></div>
+        <form id="changePassForm">
+          <div class="form-group">
+            <label>Tên đăng nhập hiện tại</label>
+            <input type="text" id="cur-user" placeholder="admin">
+          </div>
+          <div class="form-group">
+            <label>Mật khẩu mới</label>
+            <input type="password" id="new-pass" placeholder="Mật khẩu mới (tối thiểu 6 ký tự)">
+          </div>
+          <div class="form-group">
+            <label>Xác nhận mật khẩu</label>
+            <input type="password" id="confirm-pass" placeholder="Nhập lại mật khẩu mới">
+          </div>
+          <div class="form-msg" id="pass-msg"></div>
+          <button type="submit" class="btn-primary">Lưu Thay Đổi</button>
+        </form>
+      </div>
+
+      <div class="content-card">
+        <div class="card-header"><h3>🗄️ Dữ Liệu</h3></div>
+        <div class="settings-actions">
+          <div class="settings-action-item">
+            <div>
+              <div class="action-title">Xuất dữ liệu</div>
+              <div class="action-desc">Tải về file JSON chứa toàn bộ sách & chương đã thêm</div>
+            </div>
+            <button class="btn-secondary" onclick="exportData()">⬇ Xuất JSON</button>
+          </div>
+          <div class="settings-action-item">
+            <div>
+              <div class="action-title">Nhập dữ liệu</div>
+              <div class="action-desc">Tải lên file JSON đã xuất trước đó</div>
+            </div>
+            <label class="btn-secondary" style="cursor:pointer">
+              ⬆ Nhập JSON
+              <input type="file" accept=".json" id="import-file" style="display:none" onchange="importData(event)">
+            </label>
+          </div>
+          <div class="settings-action-item">
+            <div>
+              <div class="action-title">Nạp dữ liệu mẫu</div>
+              <div class="action-desc">Thêm các truyện mẫu đang hiển thị trên trang chủ vào hệ thống</div>
+            </div>
+            <button class="btn-secondary" onclick="seedSampleData()">📥 Nạp Mẫu</button>
+          </div>
+          <div class="settings-action-item danger-item">
+            <div>
+              <div class="action-title">Xóa toàn bộ dữ liệu</div>
+              <div class="action-desc">Xóa tất cả sách và chương đã thêm (không thể hoàn tác)</div>
+            </div>
+            <button class="btn-danger" onclick="clearAllData()">🗑 Xóa Tất Cả</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</main>
+
+<!-- Book Modal -->
+<div class="modal-overlay" id="bookModal">
+  <div class="modal">
+    <div class="modal-header">
+      <h3 id="modal-title">Thêm Sách Mới</h3>
+      <button class="modal-close" id="modalClose">✕</button>
+    </div>
+    <div class="modal-body">
+      <form id="bookForm">
+        <input type="hidden" id="edit-id">
+        <div class="form-row">
+          <div class="form-group">
+            <label>Tên Truyện *</label>
+            <input type="text" id="f-title" placeholder="Đấu Phá Thương Khung" required>
+          </div>
+          <div class="form-group">
+            <label>Tác Giả *</label>
+            <input type="text" id="f-author" placeholder="Thiên Tằm Thổ Đậu" required>
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Thể Loại (phân cách bằng dấu phẩy)</label>
+            <input type="text" id="f-genres" placeholder="Tiên Hiệp, Huyền Huyễn, Hành Động">
+          </div>
+          <div class="form-group">
+            <label>Tổng Số Chương</label>
+            <input type="number" id="f-chapters" min="1" placeholder="1000">
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Danh Mục (có thể chọn nhiều)</label>
+          <div id="book-cat-checkboxes" class="cat-checkbox-group"></div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Trạng Thái</label>
+            <select id="f-status">
+              <option value="ongoing">Đang ra</option>
+              <option value="complete">Hoàn thành</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Đánh Giá (1–5)</label>
+            <input type="number" id="f-rating" min="1" max="5" step="0.1" placeholder="4.5">
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Ảnh Bìa</label>
+          <div class="img-upload-wrap">
+            <div class="img-preview-box" id="img-preview-box">
+              <span class="img-preview-placeholder">📷</span>
+            </div>
+            <div class="img-upload-controls">
+              <label class="btn-secondary img-upload-btn">
+                📁 Chọn ảnh
+                <input type="file" id="f-img-file" accept="image/*" style="display:none">
+              </label>
+              <div class="img-or">hoặc dán URL</div>
+              <input type="text" id="f-img" placeholder="https://example.com/cover.jpg">
+              <button type="button" class="btn-icon" id="clear-img-btn" title="Xóa ảnh">✕</button>
+            </div>
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Mô Tả / Giới Thiệu</label>
+          <textarea id="f-desc" rows="5" placeholder="Tóm tắt nội dung truyện..."></textarea>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn-secondary" id="cancelModal">Hủy</button>
+          <button type="submit" class="btn-primary">💾 Lưu Truyện</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="confirmModal">
+  <div class="modal modal-sm">
+    <div class="modal-header"><h3>Xác Nhận Xóa</h3></div>
+    <div class="modal-body">
+      <p id="confirm-msg">Bạn có chắc muốn xóa truyện này?</p>
+      <div class="modal-footer">
+        <button class="btn-secondary" id="confirmCancel">Hủy</button>
+        <button class="btn-danger" id="confirmOk">Xóa</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Category Modal -->
+<div class="modal-overlay" id="categoryModal">
+  <div class="modal">
+    <div class="modal-header">
+      <h3 id="cat-modal-title">Thêm Danh Mục</h3>
+      <button class="modal-close" id="catModalClose">✕</button>
+    </div>
+    <div class="modal-body">
+      <form id="categoryForm">
+        <input type="hidden" id="cat-edit-id">
+        <div class="form-row">
+          <div class="form-group" style="flex:0 0 90px">
+            <label>Icon</label>
+            <input type="text" id="cat-icon" placeholder="⚔️" maxlength="4" style="text-align:center;font-size:22px;padding:8px">
+          </div>
+          <div class="form-group">
+            <label>Tên Danh Mục *</label>
+            <input type="text" id="cat-name" placeholder="Dành Cho Nam" required>
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Danh Mục Cha (để trống nếu là danh mục gốc)</label>
+          <select id="cat-parent">
+            <option value="">— Không có (danh mục gốc) —</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label style="display:flex;align-items:center;gap:10px;cursor:pointer;font-weight:normal">
+            <input type="checkbox" id="cat-show-home" style="width:auto;width:16px;height:16px;accent-color:#4a90d9">
+            <span>Hiển thị trên trang chủ <span style="color:#888;font-size:12px">(chỉ áp dụng cho danh mục gốc)</span></span>
+          </label>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn-secondary" id="cancelCatModal">Hủy</button>
+          <button type="submit" class="btn-primary">💾 Lưu</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<script src="admin.js"></script>
+</body>
+</html>

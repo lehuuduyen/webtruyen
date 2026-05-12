@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Thể Loại - WebTruyện</title>
+<meta name="description" id="meta-desc" content="Danh sách truyện theo thể loại tại WebTruyện - Đọc truyện online miễn phí.">
+<meta property="og:title" id="og-title" content="Thể Loại - WebTruyện">
+<meta property="og:description" id="og-desc" content="Danh sách truyện theo thể loại tại WebTruyện">
+<meta property="og:type" content="website">
+<meta name="twitter:card" content="summary">
+<link rel="stylesheet" href="assets/css/style.css">
+<link rel="stylesheet" href="assets/css/book.css">
+<link rel="stylesheet" href="assets/css/genre.css">
+</head>
+<body class="book-detail-page genre-page">
+
+<header class="mini-header">
+  <div class="mini-header-inner">
+    <a href="index.html" class="mini-logo">🐧 WebTruyện</a>
+    <div class="mini-search-box">
+      <input type="text" placeholder="Tìm kiếm truyện..." id="miniSearchInput" autocomplete="off">
+      <button onclick="miniSearch()">Tìm</button>
+    </div>
+  </div>
+</header>
+
+<!-- Genre Hero Banner -->
+<div class="genre-hero" id="genre-hero">
+  <div class="genre-hero-inner">
+    <div class="genre-hero-icon" id="genre-icon">📚</div>
+    <div class="genre-hero-text">
+      <h1 class="genre-hero-title" id="genre-title">Thể Loại</h1>
+      <p class="genre-hero-desc" id="genre-desc">Danh sách truyện theo thể loại</p>
+    </div>
+    <div class="genre-hero-stats">
+      <div class="genre-stat"><span id="stat-total">0</span><small>Truyện</small></div>
+      <div class="genre-stat"><span id="stat-ongoing">0</span><small>Đang ra</small></div>
+      <div class="genre-stat"><span id="stat-complete">0</span><small>Hoàn thành</small></div>
+    </div>
+  </div>
+</div>
+
+<!-- Breadcrumb + filters -->
+<div class="genre-toolbar-wrap">
+  <div class="genre-toolbar">
+    <div class="breadcrumb" style="margin:0">
+      <a href="index.html">Trang Chủ</a>
+      <span>›</span>
+      <span id="breadcrumb-name">Thể Loại</span>
+    </div>
+    <div class="genre-filters">
+      <button class="filter-btn active" data-filter="all">Tất Cả</button>
+      <button class="filter-btn" data-filter="ongoing">Đang Ra</button>
+      <button class="filter-btn" data-filter="complete">Hoàn Thành</button>
+    </div>
+    <div class="genre-sort">
+      <select id="sort-select">
+        <option value="hot">🔥 Hot nhất</option>
+        <option value="new">🆕 Mới nhất</option>
+        <option value="chapter">📖 Nhiều chương</option>
+      </select>
+    </div>
+  </div>
+</div>
+
+<!-- Main content -->
+<div class="genre-main-wrap">
+  <div class="genre-content">
+    <!-- Book grid -->
+    <div class="genre-book-grid" id="genre-book-grid"></div>
+
+    <!-- Pagination -->
+    <div class="pagination" id="pagination"></div>
+  </div>
+
+  <!-- Sidebar -->
+  <aside class="genre-sidebar">
+    <div class="sidebar-box">
+      <div class="sidebar-box-title">📚 Thể Loại Khác</div>
+      <div class="genre-tag-list" id="genre-tag-list"></div>
+    </div>
+    <div class="sidebar-box">
+      <div class="sidebar-box-title">🔥 Xem Nhiều Nhất</div>
+      <ul class="sidebar-top-list" id="sidebar-top-list"></ul>
+    </div>
+  </aside>
+</div>
+
+<footer class="mini-footer">
+  <div class="mini-footer-inner">
+    <a href="index.html">Trang Chủ</a> ·
+    <a href="#">Tất Cả Thể Loại</a> ·
+    <a href="#">Liên Hệ</a>
+    <div class="mini-footer-copy">© 2024 WebTruyện</div>
+  </div>
+</footer>
+
+<script src="assets/js/genre.js"></script>
+</body>
+</html>
