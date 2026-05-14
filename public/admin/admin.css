@@ -701,9 +701,13 @@ input, select, textarea { font-family: inherit; font-size: 14px; }
   transition: background 0.15s;
 }
 .cat-row:hover { background: #f7f9fc; }
-.cat-row.cat-child { background: #fafbfd; padding-left: 32px; }
+.cat-row.cat-child { background: #fafbfd; }
 .cat-row-left { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
-.cat-indent { color: #bbb; font-size: 13px; }
+.cat-indent { font-size: 12px; display: inline-flex; align-items: center; }
+.cat-depth-badge {
+  font-size: 10px; padding: 1px 6px; border-radius: 10px;
+  background: #eef2ff; color: #6366f1; font-weight: 600;
+}
 .cat-icon-badge { font-size: 18px; }
 .cat-name-text { font-weight: 600; color: #1e2a3a; font-size: 14px; }
 .cat-home-badge {
@@ -716,15 +720,73 @@ input, select, textarea { font-family: inherit; font-size: 14px; }
 
 /* ===== BOOK CATEGORY CHECKBOXES ===== */
 .cat-checkbox-group {
-  display: flex; flex-wrap: wrap; gap: 12px;
-  padding: 10px; background: #f7f9fc; border-radius: 8px;
-  border: 1.5px solid #e8edf2; max-height: 160px; overflow-y: auto;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 0 1px;
+  background: #e8edf2;
+  border: 1.5px solid #e8edf2;
+  border-radius: 10px;
+  overflow: hidden;
+  max-height: 220px;
+  overflow-y: auto;
 }
-.cat-check-group { display: flex; flex-direction: column; gap: 4px; min-width: 140px; }
-.cat-check-parent { font-size: 11px; font-weight: 700; color: #4a90d9; text-transform: uppercase; margin-bottom: 2px; }
-.cat-check-item { display: flex; align-items: center; gap: 6px; font-size: 13px; color: #333; cursor: pointer; padding: 2px 0; }
-.cat-check-item input { accent-color: #4a90d9; }
-.cat-check-child { padding-left: 10px; color: #555; }
+
+.cat-check-col {
+  display: flex;
+  flex-direction: column;
+  background: #f7f9fc;
+  padding: 8px 0;
+}
+
+.cat-check-item {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 12.5px;
+  color: #333;
+  cursor: pointer;
+  padding: 5px 12px;
+  transition: background 0.1s;
+  user-select: none;
+  white-space: nowrap;
+}
+.cat-check-item:hover { background: #eef3fb; }
+.cat-check-item input[type="checkbox"] {
+  accent-color: #4a90d9;
+  width: 14px; height: 14px;
+  flex-shrink: 0;
+  cursor: pointer;
+}
+
+/* Root = in đậm, có màu nền riêng */
+.cat-check-root {
+  font-weight: 700;
+  font-size: 13px;
+  color: #1a3a6b;
+  background: #eef3fb;
+  border-bottom: 1px solid #dce6f5;
+  padding: 7px 12px;
+}
+.cat-check-root:hover { background: #dce6f5; }
+
+/* Tree connector */
+.cat-check-tree {
+  font-family: monospace;
+  font-size: 11px;
+  color: #bbb;
+  flex-shrink: 0;
+  letter-spacing: -1px;
+}
+
+.cat-check-icon { flex-shrink: 0; font-size: 13px; }
+.cat-check-name { flex: 1; overflow: hidden; text-overflow: ellipsis; }
+
+.cat-check-has-children {
+  font-size: 10px;
+  color: #aaa;
+  margin-left: 2px;
+  flex-shrink: 0;
+}
 
 @media (max-width: 600px) {
   .tab-content { padding: 14px; }

@@ -8,14 +8,14 @@ function toSlug(str) {
 }
 
 const COVERS = [
-  ['#667eea','#764ba2'], ['#f093fb','#f5576c'], ['#4facfe','#00f2fe'],
-  ['#43e97b','#38f9d7'], ['#fa709a','#fee140'], ['#a18cd1','#fbc2eb'],
-  ['#fda085','#f6d365'], ['#89f7fe','#66a6ff'], ['#f7971e','#ffd200'],
-  ['#96fbc4','#f9f586'], ['#ff9a9e','#fad0c4'], ['#a1c4fd','#c2e9fb'],
-  ['#d4fc79','#96e6a1'], ['#30cfd0','#667eea'], ['#f77062','#fe5196'],
-  ['#c471f5','#fa71cd'], ['#11998e','#38ef7d'], ['#fc4a1a','#f7b733'],
-  ['#4e54c8','#8f94fb'], ['#00b09b','#96c93d'], ['#f953c6','#b91d73'],
-  ['#3f2b96','#a8c0ff'], ['#ee0979','#ff6a00'], ['#1d976c','#93f9b9'],
+  ['#667eea', '#764ba2'], ['#f093fb', '#f5576c'], ['#4facfe', '#00f2fe'],
+  ['#43e97b', '#38f9d7'], ['#fa709a', '#fee140'], ['#a18cd1', '#fbc2eb'],
+  ['#fda085', '#f6d365'], ['#89f7fe', '#66a6ff'], ['#f7971e', '#ffd200'],
+  ['#96fbc4', '#f9f586'], ['#ff9a9e', '#fad0c4'], ['#a1c4fd', '#c2e9fb'],
+  ['#d4fc79', '#96e6a1'], ['#30cfd0', '#667eea'], ['#f77062', '#fe5196'],
+  ['#c471f5', '#fa71cd'], ['#11998e', '#38ef7d'], ['#fc4a1a', '#f7b733'],
+  ['#4e54c8', '#8f94fb'], ['#00b09b', '#96c93d'], ['#f953c6', '#b91d73'],
+  ['#3f2b96', '#a8c0ff'], ['#ee0979', '#ff6a00'], ['#1d976c', '#93f9b9'],
 ];
 
 function coverStyle(i) {
@@ -35,7 +35,7 @@ function timeAgo(dateStr) {
 
 function renderStars(rating) {
   const full = Math.round(rating || 0);
-  return Array.from({length: 5}, (_, i) =>
+  return Array.from({ length: 5 }, (_, i) =>
     `<span class="${i < full ? 'star-on' : 'star-off'}">★</span>`
   ).join('');
 }
@@ -107,13 +107,39 @@ function makeBookCard(book, i) {
 function makeListItem(book, rank) {
   const li = document.createElement('li');
   const rankClass = rank === 1 ? 'r1' : rank === 2 ? 'r2' : rank === 3 ? 'r3' : '';
-  const ch = book.chapters ? 'Ch.' + book.chapters : '';
+  const views = book.views != null ? (book.views >= 1000 ? (book.views / 1000).toFixed(1) + 'k' : book.views) : '';
   li.innerHTML = `
     <span class="rank ${rankClass}">${rank}</span>
     <a href="book.html?slug=${encodeURIComponent(book.slug)}">${book.title}</a>
-    ${ch ? `<span class="chapter-info">${ch}</span>` : ''}
+    ${views ? `<span class="chapter-info">${views}</span>` : ''}
   `;
   return li;
+}
+
+// ===== UTILS =====
+function shuffle(arr) {
+  const a = [...arr];
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
+
+// Lấy toàn bộ id hậu duệ của một danh mục (đệ quy nhiều cấp)
+function getAllDescendantIds(catId, cats) {
+  const ids = [];
+  const direct = cats.filter(c => c.parent_id === catId);
+  for (const child of direct) {
+    ids.push(child.id);
+    ids.push(...getAllDescendantIds(child.id, cats));
+  }
+  return ids;
+}
+
+// Lấy tất cả id của catId và toàn bộ hậu duệ
+function getCatAllIds(catId, cats) {
+  return new Set([catId, ...getAllDescendantIds(catId, cats)]);
 }
 
 // ===== DYNAMIC CATEGORY SECTIONS =====
@@ -121,20 +147,15 @@ function renderDynCatBookGrid(parentId, selectedCatId, books, cats) {
   const grid = document.getElementById('dyn-cat-grid-' + parentId);
   if (!grid) return;
   grid.innerHTML = '';
-  grid.className = 'book-grid-h';
-  let pool;
-  if (selectedCatId === parentId) {
-    const childIds = cats.filter(c => c.parent_id === parentId).map(c => c.id);
-    const allIds = new Set([parentId, ...childIds]);
-    pool = books.filter(b => (b.categoryIds || []).some(id => allIds.has(id)));
-  } else {
-    pool = books.filter(b => (b.categoryIds || []).includes(selectedCatId));
-  }
+  grid.className = 'book-grid-6';
+  // Lấy toàn bộ hậu duệ (đệ quy nhiều cấp)
+  const allIds = getCatAllIds(selectedCatId, cats);
+  const pool = books.filter(b => (b.categoryIds || []).some(id => allIds.has(id)));
   if (!pool.length) {
-    grid.innerHTML = '<div style="color:#9ca3af;padding:16px;font-size:13px;grid-column:span 2">Chưa có truyện nào trong danh mục này.</div>';
+    grid.innerHTML = '<div style="color:#9ca3af;padding:16px;font-size:13px;grid-column:span 6">Chưa có truyện nào trong danh mục này.</div>';
     return;
   }
-  pool.slice(0, 8).forEach((book, i) => grid.appendChild(makeBookCardH(book, i + 12)));
+  shuffle(pool).slice(0, 6).forEach((book, i) => grid.appendChild(makeBookCard(book, i + 12)));
 }
 
 function renderDynamicCategorySection(cats, books) {
@@ -146,28 +167,31 @@ function renderDynamicCategorySection(cats, books) {
   if (!roots.length) return;
 
   roots.forEach(parent => {
-    const children = cats.filter(c => c.parent_id === parent.id)
-      .sort((a, b) => (a.order || 0) - (b.order || 0));
-    const allIds = new Set([parent.id, ...children.map(c => c.id)]);
+    // Lấy toàn bộ hậu duệ (đệ quy nhiều cấp)
+    const allIds = getCatAllIds(parent.id, cats);
     const sectionBooks = books.filter(b => (b.categoryIds || []).some(id => allIds.has(id)));
     if (!sectionBooks.length) return;
+
+    // Chỉ lấy con trực tiếp cho tabs (cấp 1)
+    const directChildren = cats.filter(c => c.parent_id === parent.id)
+      .sort((a, b) => (a.order || 0) - (b.order || 0));
 
     const section = document.createElement('div');
     section.className = 'section dyn-cat-section';
 
-    const tabsHtml = children.length
+    const tabsHtml = directChildren.length
       ? `<div class="dyn-cat-tabs">
           <button class="dyn-cat-tab active" data-cat-id="${parent.id}">Tất Cả</button>
-          ${children.map(c => `<button class="dyn-cat-tab" data-cat-id="${c.id}">${c.icon || ''} ${c.name}</button>`).join('')}
+          ${directChildren.map(c => `<button class="dyn-cat-tab" data-cat-id="${c.id}">${c.icon || ''} ${c.name}</button>`).join('')}
         </div>`
       : '';
 
     section.innerHTML = `
       <div class="section-header" style="flex-wrap:wrap;gap:8px">
         <h2>${parent.icon || '📚'} ${parent.name}</h2>
-        ${tabsHtml}
+        <a href="genre.html?cat=${encodeURIComponent(parent.slug)}" class="more-link">Xem thêm »</a>
       </div>
-      <div class="book-grid-h" id="dyn-cat-grid-${parent.id}"></div>
+      <div class="book-grid-6" id="dyn-cat-grid-${parent.id}"></div>
     `;
     container.appendChild(section);
 
@@ -177,10 +201,123 @@ function renderDynamicCategorySection(cats, books) {
       btn.addEventListener('click', function () {
         section.querySelectorAll('.dyn-cat-tab').forEach(b => b.classList.remove('active'));
         this.classList.add('active');
+        // Khi click tab con, filter theo toàn bộ hậu duệ của tab đó
         renderDynCatBookGrid(parent.id, this.dataset.catId, books, cats);
       });
     });
+
+    // 3-col ranking below each category (filtered by this category)
+    renderRankingCols(sectionBooks, container);
   });
+}
+
+// ===== 3-COL RANKING (reusable) =====
+function renderRankingCols(books, container) {
+  if (!books.length || !container) return;
+
+  const cols = [
+    { title: '🔥 Truyện Hot', href: 'genre.html?sort=hot', pool: [...books].sort((a, b) => (b.views || 0) - (a.views || 0)).slice(0, 10) },
+    { title: '🆕 Truyện Mới', href: 'genre.html?sort=new', pool: [...books].sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt)).slice(0, 10) },
+    { title: '✅ Đã Hoàn Thành', href: 'genre.html?sort=complete', pool: books.filter(b => b.status === 'complete').slice(0, 10) },
+  ].filter(c => c.pool.length);
+
+  if (!cols.length) return;
+
+  const wrapper = document.createElement('div');
+  wrapper.className = 'rank-cols';
+
+  cols.forEach((col, ci) => {
+    const [top, ...rest] = col.pool;
+    const link = b => `book.html?slug=${encodeURIComponent(b.slug)}`;
+    const bg = coverStyle(ci * 8);
+
+    const restItems = rest.map((b, i) => {
+      const n = i + 2;
+      const cls = n === 2 ? 'n2' : n === 3 ? 'n3' : '';
+      return `<li><span class="rn ${cls}">${n}</span><a href="${link(b)}">${b.title}</a></li>`;
+    }).join('');
+
+    const colEl = document.createElement('div');
+    colEl.className = 'rank-col';
+    colEl.innerHTML = `
+      <div class="rank-col-hd">
+        <h3>${col.title}</h3>
+        <a href="${col.href}" class="more-link">Xem thêm ›</a>
+      </div>
+      <div class="rank-feat">
+        <div class="rank-feat-info">
+          <div class="rank-badge-1">1</div>
+          <div class="rank-feat-title"><a href="${link(top)}">${top.title}</a></div>
+          ${top.desc ? `<div class="rank-feat-desc">${top.desc}</div>` : ''}
+          ${top.author ? `<div class="rank-feat-author">${top.author}</div>` : ''}
+        </div>
+        <div class="rank-feat-cover" style="background:${bg}">
+          ${top.img ? `<img src="${top.img}" alt="${top.title}" onerror="this.style.display='none'">` : ''}
+        </div>
+      </div>
+      ${rest.length ? `<ul class="rank-list">${restItems}</ul>` : ''}
+    `;
+    wrapper.appendChild(colEl);
+  });
+
+  container.appendChild(wrapper);
+}
+
+
+// ===== NAV CATEGORY LINKS =====
+function updateNav(cats) {
+  const navLinks = document.getElementById('navLinks');
+  if (!navLinks) return;
+  const roots = cats.filter(c => !c.parent_id).sort((a, b) => (a.order || 0) - (b.order || 0)).slice(0, 8);
+  roots.forEach(cat => {
+    const li = document.createElement('li');
+    li.innerHTML = `<a href="genre.html?cat=${encodeURIComponent(cat.slug)}">${cat.icon ? cat.icon + ' ' : ''}${cat.name}</a>`;
+    navLinks.appendChild(li);
+  });
+}
+
+// ===== THREE-COLUMN TEXT LIST SECTIONS =====
+function renderThreeColSections(books, cats) {
+  const container = document.getElementById('three-col-sections');
+  if (!container || !books.length || !cats.length) return;
+
+  const rootCats = cats.filter(c => !c.parent_id)
+    .sort((a, b) => (a.order || 0) - (b.order || 0));
+  if (!rootCats.length) return;
+
+  for (let row = 0; row < Math.ceil(rootCats.length / 3); row++) {
+    const rowCats = rootCats.slice(row * 3, row * 3 + 3);
+    const rowEl = document.createElement('div');
+    rowEl.className = 'three-col-layout';
+
+    rowCats.forEach(cat => {
+      const allIds = getCatAllIds(cat.id, cats);
+      const catBooks = books.filter(b => (b.categoryIds || []).some(id => allIds.has(id))).slice(0, 10);
+      if (!catBooks.length) return;
+
+      const sec = document.createElement('div');
+      sec.className = 'section';
+      const listHtml = catBooks.map((book, i) => {
+        const rankClass = i === 0 ? 'r1' : i === 1 ? 'r2' : i === 2 ? 'r3' : '';
+        const chLabel = book.chapters ? `<span class="chapter-info">Ch.${book.chapters}</span>` : '';
+        return `<li>
+          <span class="rank ${rankClass}">${i + 1}</span>
+          <a href="book.html?slug=${encodeURIComponent(book.slug)}">${book.title}</a>
+          ${chLabel}
+        </li>`;
+      }).join('');
+      sec.innerHTML = `
+        <div class="section-header">
+          <h2>${cat.icon || '📚'} ${cat.name}</h2>
+          <a href="genre.html?cat=${encodeURIComponent(cat.slug)}" class="more-link">Xem thêm »</a>
+        </div>
+        <ul class="book-list">${listHtml}</ul>
+      `;
+      rowEl.appendChild(sec);
+    });
+
+    if (rowEl.children.length) container.appendChild(rowEl);
+  }
 }
 
 // ===== READING HISTORY (localStorage — user preference) =====
@@ -235,6 +372,9 @@ document.getElementById('navToggle').addEventListener('click', function () {
     fetch('/api/categories').then(r => r.json()).catch(() => []),
   ]);
 
+  // ===== NAV LINKS =====
+  updateNav(cats);
+
   // ===== TOP LAYOUT =====
   if (books.length) {
     document.getElementById('top-layout').style.display = '';
@@ -254,6 +394,9 @@ document.getElementById('navToggle').addEventListener('click', function () {
 
   // ===== DYNAMIC CATEGORY SECTIONS =====
   renderDynamicCategorySection(cats, books);
+
+  // ===== THREE-COLUMN TEXT LISTS =====
+  renderThreeColSections(books, cats);
 
   // ===== READING HISTORY =====
   renderReadingHistory();

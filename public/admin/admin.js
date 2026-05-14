@@ -1,6 +1,30 @@
 (function () {
   'use strict';
 
+  // ===== CATEGORY TREE HELPERS =====
+  function catDescendantIds(catId, cats) {
+    const ids = [];
+    cats.filter(c => c.parent_id === catId).forEach(c => {
+      ids.push(c.id);
+      ids.push(...catDescendantIds(c.id, cats));
+    });
+    return ids;
+  }
+
+  // Render <option> elements for a category select, indented by depth
+  function buildCatOptions(select, cats, excludeIds, selectedId, parentId, depth) {
+    cats.filter(c => (c.parent_id || null) === (parentId || null) && !excludeIds.has(c.id))
+      .sort((a, b) => (a.order || 0) - (b.order || 0))
+      .forEach(c => {
+        const opt = document.createElement('option');
+        opt.value = c.id;
+        opt.textContent = '  '.repeat(depth) + (c.icon || '📁') + ' ' + c.name;
+        if (c.id === selectedId) opt.selected = true;
+        select.appendChild(opt);
+        buildCatOptions(select, cats, excludeIds, selectedId, c.id, depth + 1);
+      });
+  }
+
   // ===== AUTH =====
   const _token = sessionStorage.getItem('admin-token');
   if (!_token) { location.href = 'login.html'; return; }
@@ -251,20 +275,44 @@
       return;
     }
     wrap.innerHTML = '';
-    const roots = cats.filter(c => !c.parent_id);
+
+    const sel = new Set(selectedIds || []);
+    const roots = cats.filter(c => !c.parent_id).sort((a, b) => (a.order || 0) - (b.order || 0));
+
     roots.forEach(root => {
-      const children = cats.filter(c => c.parent_id === root.id);
-      const group = document.createElement('div');
-      group.className = 'cat-check-group';
-      group.innerHTML = `<div class="cat-check-parent">${root.icon || '📁'} ${root.name}</div>`;
-      [root, ...children].forEach(c => {
-        const label = document.createElement('label');
-        label.className = 'cat-check-item' + (c.parent_id ? ' cat-check-child' : '');
-        const checked = (selectedIds || []).includes(c.id) ? 'checked' : '';
-        label.innerHTML = `<input type="checkbox" name="book-cat" value="${c.id}" ${checked}> ${c.icon || ''} ${c.name}`;
-        group.appendChild(label);
-      });
-      wrap.appendChild(group);
+      // Column wrapper cho mỗi root category
+      const col = document.createElement('div');
+      col.className = 'cat-check-col';
+
+      // Root item
+      const rootLabel = document.createElement('label');
+      rootLabel.className = 'cat-check-item cat-check-root';
+      rootLabel.innerHTML = `<input type="checkbox" name="book-cat" value="${root.id}" ${sel.has(root.id) ? 'checked' : ''}><span class="cat-check-icon">${root.icon || '📁'}</span><span class="cat-check-name">${root.name}</span>`;
+      col.appendChild(rootLabel);
+
+      // Hàm đệ quy render con
+      function renderChildren(parentId, depth) {
+        cats.filter(c => c.parent_id === parentId)
+          .sort((a, b) => (a.order || 0) - (b.order || 0))
+          .forEach((cat, idx, arr) => {
+            const isLast = idx === arr.length - 1;
+            const hasChildren = cats.some(c => c.parent_id === cat.id);
+            const childLabel = document.createElement('label');
+            childLabel.className = 'cat-check-item cat-check-child';
+            childLabel.style.setProperty('--depth', depth);
+            childLabel.innerHTML = `
+              <span class="cat-check-tree">${'│  '.repeat(depth - 1)}${isLast ? '└─' : '├─'}</span>
+              <input type="checkbox" name="book-cat" value="${cat.id}" ${sel.has(cat.id) ? 'checked' : ''}>
+              <span class="cat-check-icon">${cat.icon || '📁'}</span>
+              <span class="cat-check-name">${cat.name}</span>
+              ${hasChildren ? '<span class="cat-check-has-children">▾</span>' : ''}
+            `;
+            col.appendChild(childLabel);
+            renderChildren(cat.id, depth + 1);
+          });
+      }
+      renderChildren(root.id, 1);
+      wrap.appendChild(col);
     });
   }
 
@@ -356,7 +404,9 @@
       showToast('Đã xóa truyện!', 'error');
     } else if (deleteTarget.type === 'category') {
       await api('DELETE', '/api/categories/' + deleteTarget.id);
-      _categories = _categories.filter(c => c.id !== deleteTarget.id && c.parent_id !== deleteTarget.id);
+      // Xóa toàn bộ hậu duệ (đệ quy nhiều cấp) khỏi local cache
+      const allDel = new Set([deleteTarget.id, ...catDescendantIds(deleteTarget.id, _categories)]);
+      _categories = _categories.filter(c => !allDel.has(c.id));
       closeModal('confirmModal');
       renderCategories();
       showToast('Đã xóa danh mục!', 'error');
@@ -619,34 +669,42 @@
     if (!filtered.length) { empty.style.display = ''; return; }
     empty.style.display = 'none';
 
-    const roots = filtered.filter(c => !c.parent_id).sort((a, b) => (a.order || 0) - (b.order || 0));
-    const shownIds = new Set();
-    roots.forEach(root => {
-      shownIds.add(root.id);
-      renderCatRow(container, root, false);
-      filtered.filter(c => c.parent_id === root.id)
+    // Render đệ quy nhiều cấp
+    const filteredIds = new Set(filtered.map(c => c.id));
+    function renderLevel(parentId, depth) {
+      filtered.filter(c => (c.parent_id || null) === (parentId || null))
         .sort((a, b) => (a.order || 0) - (b.order || 0))
-        .forEach(child => { shownIds.add(child.id); renderCatRow(container, child, true); });
-    });
-    filtered.filter(c => !shownIds.has(c.id)).forEach(c => renderCatRow(container, c, false));
+        .forEach(cat => {
+          renderCatRow(container, cat, depth);
+          renderLevel(cat.id, depth + 1);
+        });
+    }
+    renderLevel(null, 0);
   }
 
-  function renderCatRow(container, cat, isChild) {
+  function renderCatRow(container, cat, depth) {
     const books = getBooks();
     const bookCount = books.filter(b => (b.categoryIds || []).includes(cat.id)).length;
     const row = document.createElement('div');
-    row.className = 'cat-row' + (isChild ? ' cat-child' : '');
+    row.className = 'cat-row' + (depth > 0 ? ' cat-child' : '');
+    row.style.setProperty('--cat-depth', depth);
     row.dataset.id = cat.id;
+    // Thanh màu bên trái theo cấp
+    const depthColors = ['#e84242','#3b82f6','#10b981','#f59e0b','#8b5cf6'];
+    const lineColor = depthColors[Math.min(depth, depthColors.length - 1)];
+    const indent = depth > 0
+      ? `<span class="cat-indent" style="padding-left:${depth * 16}px;color:${lineColor}">└─</span>`
+      : '';
     row.innerHTML = `
       <div class="cat-row-left">
-        ${isChild ? '<span class="cat-indent">└─</span>' : ''}
+        ${indent}
         <span class="cat-icon-badge">${cat.icon || '📁'}</span>
         <span class="cat-name-text">${cat.name}</span>
-        ${!cat.parent_id ? `<span class="cat-home-badge ${cat.showOnHome ? 'on' : ''}">${cat.showOnHome ? '✅ Trang Chủ' : '⭕ Ẩn'}</span>` : ''}
+        ${depth === 0 ? `<span class="cat-home-badge ${cat.showOnHome ? 'on' : ''}">${cat.showOnHome ? '✅ Trang Chủ' : '⭕ Ẩn'}</span>` : `<span class="cat-depth-badge">Cấp ${depth}</span>`}
         <span class="cat-count-badge">${bookCount} truyện</span>
       </div>
       <div class="table-actions">
-        ${!cat.parent_id ? `<button class="btn-icon" onclick="toggleCatHome('${cat.id}')" title="Bật/Tắt hiển thị trang chủ">🏠</button>` : ''}
+        ${depth === 0 ? `<button class="btn-icon" onclick="toggleCatHome('${cat.id}')" title="Bật/Tắt hiển thị trang chủ">🏠</button>` : ''}
         <button class="btn-icon" onclick="editCategory('${cat.id}')">✏️</button>
         <button class="btn-icon delete" onclick="confirmDeleteCat('${cat.id}')">🗑</button>
       </div>
@@ -689,15 +747,13 @@
 
   function populateCatParentSelect(editingId, selectedParentId) {
     const select = document.getElementById('cat-parent');
-    const cats = getCategories().filter(c => !c.parent_id && c.id !== editingId);
     select.innerHTML = '<option value="">— Không có (danh mục gốc) —</option>';
-    cats.forEach(c => {
-      const opt = document.createElement('option');
-      opt.value = c.id;
-      opt.textContent = (c.icon || '') + ' ' + c.name;
-      if (c.id === selectedParentId) opt.selected = true;
-      select.appendChild(opt);
-    });
+    const cats = getCategories();
+    // Loại trừ chính nó và toàn bộ hậu duệ (tránh vòng lặp)
+    const excludeIds = editingId
+      ? new Set([editingId, ...catDescendantIds(editingId, cats)])
+      : new Set();
+    buildCatOptions(select, cats, excludeIds, selectedParentId, null, 0);
   }
 
   document.getElementById('categoryForm').addEventListener('submit', async function (e) {
@@ -875,5 +931,11 @@
   Promise.all([loadBooks(), loadCategories()]).then(() => {
     renderOverview();
     renderBooks();
+    // Support autoopen query param for testing
+    const p = new URLSearchParams(location.search).get('autoopen');
+    if (p) {
+      switchTab(p);
+      if (p === 'books') setTimeout(() => document.getElementById('addBookBtn')?.click(), 400);
+    }
   });
 })();

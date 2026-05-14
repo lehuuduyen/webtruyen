@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+<head><title>Auto Login</title></head>
+<body>
+<p>Đang đăng nhập...</p>
+<script>
+fetch('/api/auth/login', {
+  method: 'POST',
+  headers: {'Content-Type': 'application/json'},
+  body: JSON.stringify({user: 'admin', pass: 'admin123'})
+})
+.then(r => r.json())
+.then(d => {
+  if (d.token) {
+    sessionStorage.setItem('admin-token', d.token);
+    sessionStorage.setItem('admin-user', d.user || 'admin');
+    // Redirect to books tab and auto-click add book
+    location.href = '/admin/dashboard.html?autoopen=books';
+  } else {
+    document.body.textContent = 'Login failed: ' + JSON.stringify(d);
+  }
+})
+.catch(e => { document.body.textContent = 'Error: ' + e.message; });
+</script>
+</body>
+</html>

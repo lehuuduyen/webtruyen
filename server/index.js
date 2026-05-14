@@ -126,6 +126,7 @@ function requireAuth(req, res, next) {
 // ===== EXPRESS APP =====
 const app = express();
 app.use(express.json({ limit: '10mb' }));
+app.use(express.static(path.join(__dirname, '..', 'public')));
 
 // ===== AUTH ROUTES =====
 app.post('/api/auth/login', (req, res) => {
