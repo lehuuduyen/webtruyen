@@ -46,7 +46,15 @@
       headers: { 'Content-Type': 'application/json', 'x-auth-token': _token },
     };
     if (body !== undefined) opts.body = JSON.stringify(body);
-    return fetch(path, opts).then(r => r.json());
+    return fetch(path, opts).then(r => {
+      if (r.status === 401) {
+        sessionStorage.removeItem('admin-token');
+        sessionStorage.removeItem('admin-user');
+        location.href = 'login.html';
+        return {};
+      }
+      return r.json();
+    });
   }
 
   // ===== IN-MEMORY CACHE =====
@@ -845,52 +853,19 @@
   };
 
   window.seedSampleData = async function () {
-    const SAMPLE = [
-      { title:'Đấu Phá Thương Khung',author:'Thiên Tằm Thổ Đậu',genres:'Tiên Hiệp, Huyền Huyễn, Hành Động',chapters:1648,status:'complete',rating:4.8,img:'https://static.truyenfull.vision/cover/o/eJzLyTDT1y1Mcw2M0C0IMAvL1g9z8nUxMYwyD3Tz1HeEgmwfR_0SAzefTKOgCI8MC_1yI0NT3QxjIyMANhQRaQ==/truyen-dau-pha-thuong-khung.jpg',desc:'Thất tộc danh gia, Đấu Khí đại lục, nơi mạnh là vua...'},
-      { title:'Phàm Nhân Tu Tiên',author:'Vong Ngữ',genres:'Tiên Hiệp, Tu Tiên, Phàm Nhân',chapters:2000,status:'complete',rating:4.9,img:'https://static.truyenfull.vision/cover/o/eJzLyTDT17WITwqMNNQtNKp01A_zNXY1ifQuc8301HeEghwTR_1IV8PsTO-w4HKTUL1yI0NT3QxjIyMANRgRnA==/pham-nhan-tu-tien.jpg',desc:'Hàn Lập — một cậu bé xuất thân bần hàn...'},
-      { title:'Đấu La Đại Lục',author:'Đường Gia Tam Thiếu',genres:'Tiên Hiệp, Huyền Huyễn, Thiếu Niên',chapters:3000,status:'complete',rating:4.7,img:'https://static.truyenfull.vision/cover/o/eJzLyTDR180LKc8Kjw9w9kly1Q9z8nUxyTQ3Ms721HeEgmxvC_3MsEKLgJLCxIqIcv1yI0NT3QxjIyMAUTMSjA==/dau-la-dai-luc-230420.jpg',desc:'Đường Tam — thiên tài chế tạo ám khí...'},
-      { title:'Toàn Chức Pháp Sư',author:'Loạn',genres:'Huyền Huyễn, Ma Pháp, Học Đường',chapters:1234,status:'complete',rating:4.6,img:'https://static.truyenfull.vision/cover/eJzLyTDWT8-NCPApLc5Kt4yK8KwwijQK9XIrLXVLzjKMdC0PdDZzjfIr9PKtSjGOSolwdbTICnBJtvB0DfPyKnYOywnIzzHLCc3IyDStdDJLcw8oCvHKMwu1LTcyNNXNMDYyAgAxnB91/toan-chuc-phap-su.jpg',desc:'Mặc Phàm — học sinh tầm thường...'},
-      { title:'Đế Bá',author:'Vô Nhân',genres:'Huyền Huyễn, Hành Động, Mạnh Mẽ',chapters:1200,status:'ongoing',rating:4.5,img:'https://static.truyenfull.vision/cover/o/eJzLyTDR193KzSo2TCpOCXKJ1A8LKEiucHN3yor31HeEglzXZP0qM-fg-IA8QxODQP1yI0NT3QxjIyMAbfcSoQ==/de-ba.jpg',desc:'Một thanh niên bình thường xuyên không sang thế giới huyền huyễn...'},
-      { title:'Võ Luyện Đỉnh Phong',author:'Thiên Hạ Bá Xướng',genres:'Kiếm Hiệp, Hành Động, Võ Hiệp',chapters:3456,status:'ongoing',rating:4.6,img:null,desc:'Dương Khai — một thiếu niên bình thường...'},
-      { title:'Thần Đạo Đế Tôn',author:'Cự Tinh Linh',genres:'Huyền Huyễn, Tiên Hiệp, Mạnh Mẽ',chapters:890,status:'ongoing',rating:4.4,img:null,desc:'Con đường tu thần bắt đầu từ phế nhân...'},
-      { title:'Long Vương Truyền Thuyết',author:'Mộng Nhập Thần Cơ',genres:'Huyền Huyễn, Phiêu Lưu, Dị Năng',chapters:567,status:'ongoing',rating:4.3,img:null,desc:'Thiếu niên mang huyết mạch Long Vương...'},
-      { title:'Kiếm Lai',author:'Phong Hỏa Hý Chư Hầu',genres:'Kiếm Hiệp, Tu Tiên, Hành Động',chapters:789,status:'ongoing',rating:4.5,img:null,desc:'Trần Bình An — cậu bé đến từ vùng đất nhỏ bé...'},
-      { title:'Lão Gia Thế Gia',author:'Ngã Thị Tiểu Thất',genres:'Đô Thị, Hiện Đại, Hài Hước',chapters:432,status:'ongoing',rating:4.2,img:null,desc:'Hào môn thế gia, tranh đấu quyền lực...'},
-    ];
-
-    const existingSlugs = new Set(getBooks().map(b => b.slug));
-    function toSlugLocal(str) {
-      return str.replace(/đ/g,'d').replace(/Đ/g,'D').normalize('NFD').replace(/[̀-ͯ]/g,'').toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'');
-    }
-    let addedBooks = 0;
-    for (const data of SAMPLE) {
-      const slug = toSlugLocal(data.title);
-      if (!existingSlugs.has(slug)) {
-        const created = await api('POST', '/api/books', { ...data, categoryIds: [] });
-        _books.unshift(created);
-        addedBooks++;
-      }
-    }
-
-    if (addedBooks > 0) {
-      showToast('Đã nạp ' + addedBooks + ' truyện mẫu!');
-    } else {
-      showToast('Tất cả dữ liệu mẫu đã tồn tại rồi!', 'error');
-    }
+    const result = await api('POST', '/api/seed');
+    if (!result.ok) { showToast('Lỗi khi nạp dữ liệu mẫu!', 'error'); return; }
+    await loadBooks();
+    await loadCategories();
     renderOverview();
     renderBooks();
+    showToast(`Đã nạp ${result.books} truyện, ${result.categories} danh mục, ${result.chapters} chương!`);
   };
 
   window.clearAllData = async function () {
     if (!confirm('Xóa TOÀN BỘ sách, chương và danh mục? Không thể hoàn tác!')) return;
-    const books = getBooks();
-    for (const b of books) {
-      await api('DELETE', '/api/books/' + b.id);
-    }
-    const cats = getCategories();
-    for (const c of cats) {
-      await api('DELETE', '/api/categories/' + c.id);
-    }
+    const result = await api('POST', '/api/clear');
+    if (!result.ok) { showToast('Lỗi khi xóa dữ liệu!', 'error'); return; }
     await loadBooks();
     await loadCategories();
     renderOverview();
