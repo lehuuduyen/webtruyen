@@ -47,9 +47,9 @@ export default async function GenreIndexPage() {
       <JsonLd data={{ '@context': 'https://schema.org', '@type': 'CollectionPage', name: 'Tất Cả Thể Loại', url: PAGE_URL }} />
 
       {/* Page header */}
-      <div className="mb-6">
-        <h1 className="text-2xl font-black text-white">Tất Cả Thể Loại</h1>
-        <p className="text-gray-400 text-sm mt-1">
+      <div className="mb-4">
+        <h1 className="text-lg sm:text-2xl font-black text-white">Tất Cả Thể Loại</h1>
+        <p className="text-gray-400 text-xs sm:text-sm mt-0.5">
           {rootCats.length} nhóm · {subCats.length} thể loại · {books.length.toLocaleString()} truyện
         </p>
       </div>

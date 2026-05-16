@@ -396,7 +396,7 @@ document.getElementById('navToggle').addEventListener('click', function () {
   renderDynamicCategorySection(cats, books);
 
   // ===== THREE-COLUMN TEXT LISTS =====
-  renderThreeColSections(books, cats);
+  // renderThreeColSections(books, cats);
 
   // ===== READING HISTORY =====
   renderReadingHistory();

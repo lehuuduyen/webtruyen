@@ -1,13 +1,6 @@
 {
-  "/_not-found/page": "app/_not-found/page.js",
-  "/robots.txt/route": "app/robots.txt/route.js",
-  "/sitemap.xml/route": "app/sitemap.xml/route.js",
-  "/bang-xep-hang/page": "app/bang-xep-hang/page.js",
-  "/tim-kiem/page": "app/tim-kiem/page.js",
   "/page": "app/page.js",
-  "/truyen/[slug]/page": "app/truyen/[slug]/page.js",
-  "/tu-sach/page": "app/tu-sach/page.js",
-  "/truyen/[slug]/chuong/[ch]/page": "app/truyen/[slug]/chuong/[ch]/page.js",
+  "/_not-found/page": "app/_not-found/page.js",
   "/the-loai/[slug]/page": "app/the-loai/[slug]/page.js",
   "/the-loai/page": "app/the-loai/page.js"
 }

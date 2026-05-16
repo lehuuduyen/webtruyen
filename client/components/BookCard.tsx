@@ -1,7 +1,7 @@
 import Link from 'next/link';
 import Image from 'next/image';
 import type { Book } from '@/lib/types';
-import { formatViews, statusLabel } from '@/lib/api';
+import { formatViews } from '@/lib/utils';
 
 // Generate a deterministic gradient color from book title
 function titleGradient(title: string) {

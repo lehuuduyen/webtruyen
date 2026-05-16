@@ -1,1 +1,0 @@
-self.__SSG_MANIFEST=new Set(["\u002Fthe-loai\u002F[slug]","\u002Ftruyen\u002F[slug]","\u002Ftruyen\u002F[slug]\u002Fchuong\u002F[ch]"]);self.__SSG_MANIFEST_CB&&self.__SSG_MANIFEST_CB()
