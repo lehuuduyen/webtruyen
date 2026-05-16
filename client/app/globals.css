@@ -1,0 +1,93 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --site-bg: #0d0d1a;
+  --site-card: #1a1a2e;
+  --site-border: #2a2a45;
+}
+
+* { box-sizing: border-box; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  background-color: var(--site-bg);
+  color: #e2e8f0;
+  font-family: system-ui, -apple-system, sans-serif;
+  min-height: 100vh;
+}
+
+body.reading-sepia { background: #f4ecd8; color: #3d2b1f; }
+body.reading-light  { background: #ffffff;  color: #1a1a1a; }
+
+::-webkit-scrollbar { width: 5px; }
+::-webkit-scrollbar-track { background: #1a1a2e; }
+::-webkit-scrollbar-thumb { background: #4c1d95; border-radius: 3px; }
+
+/* Reading typography — driven by JS CSS vars */
+.chapter-content {
+  font-size: var(--rd-size, 18px);
+  font-family: var(--rd-font, system-ui, sans-serif);
+  line-height: var(--rd-line, 1.9);
+  color: var(--rd-color, #d1d5db);
+}
+.chapter-content p {
+  margin-bottom: 1.4em;
+  text-indent: 1.5em;
+}
+.chapter-content p:first-child { text-indent: 0; }
+.chapter-content p:last-child  { margin-bottom: 0; }
+
+/* Sepia / Light theme overrides */
+body.reading-sepia {
+  background: #f8f1e3;
+  --rd-color: #4a3728;
+}
+body.reading-light {
+  background: #ffffff;
+  --rd-color: #1a1a1a;
+}
+body.reading-sepia  .doc-chrome { background: #ede4d0 !important; border-color: #c9baa0 !important; }
+body.reading-light  .doc-chrome { background: #f0f0f0 !important; border-color: #ddd !important; }
+body.reading-sepia  .doc-content-bg { background: #fdf6e3 !important; }
+body.reading-light  .doc-content-bg { background: #fff !important; }
+
+/* Scroll progress bar */
+@property --progress { syntax: '<percentage>'; initial-value: 0%; inherits: false; }
+.reading-progress-bar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 3px;
+  width: var(--scroll-pct, 0%);
+  background: linear-gradient(90deg, #7c3aed, #4f46e5, #818cf8);
+  z-index: 9999;
+  transition: width 0.1s linear;
+  border-radius: 0 2px 2px 0;
+}
+
+/* Hero star particles */
+@keyframes twinkle {
+  0%, 100% { opacity: 0.2; transform: scale(1); }
+  50%       { opacity: 1;   transform: scale(1.4); }
+}
+
+.star { animation: twinkle var(--dur, 3s) ease-in-out infinite; }
+
+/* Section header gradient line */
+.section-line {
+  background: linear-gradient(90deg, #7c3aed 0%, #4f46e5 40%, transparent 100%);
+}
+
+/* Glow pulse for featured badge */
+@keyframes glow-pulse {
+  0%, 100% { box-shadow: 0 0 8px 2px rgba(124, 58, 237, 0.4); }
+  50%       { box-shadow: 0 0 20px 5px rgba(124, 58, 237, 0.8); }
+}
+.glow-badge { animation: glow-pulse 2.5s ease-in-out infinite; }
+
+/* Hide scrollbar while keeping scroll functionality */
+.no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+.no-scrollbar::-webkit-scrollbar { display: none; }

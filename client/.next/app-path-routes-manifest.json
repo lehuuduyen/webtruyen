@@ -1,0 +1,13 @@
+{
+  "/_not-found/page": "/_not-found",
+  "/robots.txt/route": "/robots.txt",
+  "/sitemap.xml/route": "/sitemap.xml",
+  "/bang-xep-hang/page": "/bang-xep-hang",
+  "/tim-kiem/page": "/tim-kiem",
+  "/page": "/",
+  "/truyen/[slug]/page": "/truyen/[slug]",
+  "/tu-sach/page": "/tu-sach",
+  "/truyen/[slug]/chuong/[ch]/page": "/truyen/[slug]/chuong/[ch]",
+  "/the-loai/[slug]/page": "/the-loai/[slug]",
+  "/the-loai/page": "/the-loai"
+}
