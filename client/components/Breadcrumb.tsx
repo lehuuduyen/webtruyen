@@ -25,17 +25,17 @@ export default function Breadcrumb({ items }: { items: BreadcrumbItem[] }) {
           itemListElement: ldItems,
         }}
       />
-      <nav aria-label="Breadcrumb" className="text-sm text-gray-400 mb-4">
+      <nav aria-label="Breadcrumb" className="text-sm text-gray-500 mb-4">
         <ol className="flex flex-wrap items-center gap-1">
           {items.map((item, i) => (
             <li key={i} className="flex items-center gap-1">
               {i > 0 && <span aria-hidden="true" className="text-gray-600">›</span>}
               {item.href ? (
-                <Link href={item.href} className="hover:text-purple-400 transition-colors">
+                <Link href={item.href} className="hover:text-pink-600 transition-colors">
                   {item.name}
                 </Link>
               ) : (
-                <span className="text-gray-200" aria-current="page">{item.name}</span>
+                <span className="text-gray-700" aria-current="page">{item.name}</span>
               )}
             </li>
           ))}

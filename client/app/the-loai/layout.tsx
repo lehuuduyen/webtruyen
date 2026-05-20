@@ -18,7 +18,7 @@ export default async function TheLoaiLayout({ children }: { children: React.Reac
 
         {/* Desktop sidebar */}
         <aside className="hidden sm:block w-52 shrink-0 sticky top-20 mr-6">
-          <div className="rounded-2xl border border-site-border bg-site-card/40 p-3">
+          <div className="rounded-2xl border border-site-border bg-pink-50 p-3">
             <CategorySidebar rootCats={rootCats} subCats={subCats} />
           </div>
         </aside>

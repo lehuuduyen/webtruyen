@@ -47,17 +47,17 @@ export default function ChapterList({ slug, chapters }: Props) {
             value={query}
             onChange={e => setQuery(e.target.value)}
             placeholder="Tìm chương..."
-            className="w-full bg-site-bg border border-site-border rounded-lg px-3 py-1.5 text-sm text-white placeholder-gray-600 focus:outline-none focus:border-purple-500 pr-8"
+            className="w-full bg-site-bg border border-site-border rounded-lg px-3 py-1.5 text-sm text-gray-900 placeholder-gray-600 focus:outline-none focus:border-rose-500 pr-8"
           />
           {query && (
-            <button onClick={() => setQuery('')} className="absolute right-2 top-1/2 -translate-y-1/2 text-gray-500 hover:text-white text-xs">
+            <button onClick={() => setQuery('')} className="absolute right-2 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-900 text-xs">
               ✕
             </button>
           )}
         </div>
         <button
           onClick={() => setOrder(o => o === 'asc' ? 'desc' : 'asc')}
-          className="flex items-center gap-1 px-3 py-1.5 text-xs text-gray-400 border border-site-border rounded-lg hover:border-purple-500 hover:text-white transition-colors shrink-0"
+          className="flex items-center gap-1 px-3 py-1.5 text-xs text-gray-500 border border-site-border rounded-lg hover:border-rose-500 hover:text-gray-900 transition-colors shrink-0"
           title="Đảo thứ tự"
         >
           {order === 'asc' ? '↑ Cũ → Mới' : '↓ Mới → Cũ'}
@@ -73,8 +73,8 @@ export default function ChapterList({ slug, chapters }: Props) {
               onClick={() => setOpenGroup(i)}
               className={`text-[11px] px-2.5 py-1 rounded-full border transition-colors ${
                 openGroup === i
-                  ? 'bg-purple-600 border-purple-500 text-white'
-                  : 'bg-site-bg border-site-border text-gray-400 hover:border-purple-600/60 hover:text-white'
+                  ? 'bg-rose-600 border-rose-500 text-gray-900'
+                  : 'bg-site-bg border-site-border text-gray-500 hover:border-rose-400 hover:text-gray-900'
               }`}
             >
               {g.label}
@@ -91,15 +91,15 @@ export default function ChapterList({ slug, chapters }: Props) {
       )}
 
       {/* List */}
-      <div className="max-h-[420px] overflow-y-auto rounded-xl border border-site-border divide-y divide-site-border/60 bg-site-card/40">
+      <div className="max-h-[420px] overflow-y-auto rounded-xl border border-site-border divide-y divide-site-border/60 bg-pink-50">
         {displayList.map(ch => (
           <Link
             key={ch.ch}
             href={`/truyen/${slug}/chuong/${ch.ch}`}
-            className="flex items-center gap-3 px-4 py-2.5 hover:bg-purple-900/20 transition-colors group"
+            className="flex items-center gap-3 px-4 py-2.5 hover:bg-rose-100 transition-colors group"
           >
             <span className="text-[11px] text-gray-600 w-8 text-right shrink-0 font-mono">{ch.ch}</span>
-            <span className="text-sm text-gray-300 group-hover:text-white transition-colors flex-1 truncate">
+            <span className="text-sm text-gray-600 group-hover:text-gray-900 transition-colors flex-1 truncate">
               {ch.title}
             </span>
             <span className="text-[11px] text-gray-600 shrink-0 hidden sm:block">

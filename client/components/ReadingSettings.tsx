@@ -98,8 +98,8 @@ export default function ReadingSettings() {
         aria-expanded={open}
         className={`flex items-center gap-1.5 px-3 h-8 rounded-lg text-sm border transition-colors ${
           open
-            ? 'bg-purple-700 border-purple-500 text-white'
-            : 'bg-site-card border-site-border text-gray-300 hover:border-purple-500 hover:text-white'
+            ? 'bg-rose-700 border-rose-500 text-gray-900'
+            : 'bg-site-card border-site-border text-gray-600 hover:border-rose-500 hover:text-gray-900'
         }`}
       >
         <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
@@ -123,8 +123,8 @@ export default function ReadingSettings() {
                   onClick={() => update({ theme: t.value })}
                   className={`flex flex-col items-center gap-1 p-2 rounded-xl border text-[11px] font-medium transition-all ${
                     theme === t.value
-                      ? 'border-purple-500 bg-purple-900/30 text-white'
-                      : 'border-[#2a2a45] text-gray-400 hover:border-purple-700/50'
+                      ? 'border-rose-500 bg-rose-200 text-gray-900'
+                      : 'border-[#2a2a45] text-gray-500 hover:border-rose-700/50'
                   }`}
                 >
                   <span className="w-8 h-5 rounded" style={{ background: t.bg, border: '1px solid #555' }} />
@@ -138,18 +138,18 @@ export default function ReadingSettings() {
           <div className="p-4 border-b border-[#2a2a45]">
             <div className="flex items-center justify-between mb-2">
               <p className="text-[11px] text-gray-500 uppercase tracking-wider">Cỡ chữ</p>
-              <span className="text-xs font-mono text-purple-400">{size}px</span>
+              <span className="text-xs font-mono text-pink-600">{size}px</span>
             </div>
             <div className="flex items-center gap-2">
               <button onClick={() => update({ size: Math.max(14, size - 1) })}
-                className="w-8 h-7 flex items-center justify-center bg-[#0d0d1a] border border-[#2a2a45] rounded text-gray-300 hover:text-white hover:border-purple-500 text-xs transition-colors">
+                className="w-8 h-7 flex items-center justify-center bg-[#0d0d1a] border border-[#2a2a45] rounded text-gray-600 hover:text-gray-900 hover:border-rose-500 text-xs transition-colors">
                 A-
               </button>
               <input type="range" min={14} max={28} value={size}
                 onChange={e => update({ size: parseInt(e.target.value) })}
-                className="flex-1 accent-purple-500 h-1" />
+                className="flex-1 accent-rose-500 h-1" />
               <button onClick={() => update({ size: Math.min(28, size + 1) })}
-                className="w-8 h-7 flex items-center justify-center bg-[#0d0d1a] border border-[#2a2a45] rounded text-gray-300 hover:text-white hover:border-purple-500 transition-colors">
+                className="w-8 h-7 flex items-center justify-center bg-[#0d0d1a] border border-[#2a2a45] rounded text-gray-600 hover:text-gray-900 hover:border-rose-500 transition-colors">
                 A+
               </button>
             </div>
@@ -163,8 +163,8 @@ export default function ReadingSettings() {
                 <button key={f.value} onClick={() => update({ family: f.value })}
                   className={`py-1.5 px-2 rounded-lg border text-xs transition-all ${
                     family === f.value
-                      ? 'border-purple-500 bg-purple-900/30 text-white'
-                      : 'border-[#2a2a45] text-gray-400 hover:border-purple-700/50'
+                      ? 'border-rose-500 bg-rose-200 text-gray-900'
+                      : 'border-[#2a2a45] text-gray-500 hover:border-rose-700/50'
                   }`}
                   style={{ fontFamily: FAMILIES[f.value] }}>
                   {f.preview} <span style={{ fontFamily: 'system-ui' }} className="text-[10px] block">{f.label}</span>
@@ -181,8 +181,8 @@ export default function ReadingSettings() {
                 <button key={l.value} onClick={() => update({ line: l.value })}
                   className={`py-1.5 rounded-lg border text-xs transition-all ${
                     line === l.value
-                      ? 'border-purple-500 bg-purple-900/30 text-white'
-                      : 'border-[#2a2a45] text-gray-400 hover:border-purple-700/50'
+                      ? 'border-rose-500 bg-rose-200 text-gray-900'
+                      : 'border-[#2a2a45] text-gray-500 hover:border-rose-700/50'
                   }`}>
                   {l.label}
                 </button>
@@ -198,8 +198,8 @@ export default function ReadingSettings() {
                 <button key={w.value} onClick={() => update({ width: w.value })}
                   className={`py-1.5 rounded-lg border text-xs transition-all ${
                     width === w.value
-                      ? 'border-purple-500 bg-purple-900/30 text-white'
-                      : 'border-[#2a2a45] text-gray-400 hover:border-purple-700/50'
+                      ? 'border-rose-500 bg-rose-200 text-gray-900'
+                      : 'border-[#2a2a45] text-gray-500 hover:border-rose-700/50'
                   }`}>
                   {w.label}
                 </button>

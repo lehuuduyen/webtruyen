@@ -9,12 +9,12 @@ const config: Config = {
     extend: {
       colors: {
         site: {
-          bg: '#0d0d1a',
-          card: '#1a1a2e',
-          border: '#2a2a45',
-          header: '#16213e',
-          accent: '#7c3aed',
-          'accent-light': '#a78bfa',
+          bg: '#fdf4f7',
+          card: '#ffffff',
+          border: '#fecdd3',
+          header: '#fce7f3',
+          accent: '#e11d74',
+          'accent-light': '#f43f7e',
         },
       },
       fontFamily: {

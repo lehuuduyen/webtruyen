@@ -138,7 +138,7 @@ export default async function HomePage() {
                     <Link
                       key={c.id}
                       href={`/the-loai/${c.slug}`}
-                      className="text-[11px] px-2.5 py-1 rounded-full bg-site-card border border-site-border text-gray-400 hover:text-white hover:border-purple-600/60 hover:bg-purple-900/20 transition-all"
+                      className="text-[11px] px-2.5 py-1 rounded-full bg-site-card border border-site-border text-gray-500 hover:text-gray-900 hover:border-rose-400 hover:bg-rose-100 transition-all"
                     >
                       {c.name}
                     </Link>
@@ -208,16 +208,16 @@ function CategoryRankings({
   ];
 
   return (
-    <div className="rounded-2xl overflow-hidden border border-site-border bg-site-card/40">
+    <div className="rounded-2xl overflow-hidden border border-site-border bg-pink-50">
       {/* Header bar */}
       <div className="px-4 py-3 border-b border-site-border flex items-center justify-between">
-        <h3 className="font-bold text-white text-sm flex items-center gap-2">
-          <span className="w-1 h-4 rounded-full bg-gradient-to-b from-purple-400 to-indigo-600 inline-block" />
+        <h3 className="font-bold text-gray-900 text-sm flex items-center gap-2">
+          <span className="w-1 h-4 rounded-full bg-gradient-to-b from-pink-400 to-rose-500 inline-block" />
           Bảng xếp hạng — {catName}
         </h3>
         <Link
           href={`/the-loai/${catSlug}`}
-          className="text-xs text-purple-400 hover:text-purple-200 transition-colors"
+          className="text-xs text-pink-600 hover:text-pink-500 transition-colors"
         >
           Xem danh mục →
         </Link>
@@ -230,7 +230,7 @@ function CategoryRankings({
             {/* Column header */}
             <div className={`flex items-center gap-2 px-4 py-2.5 bg-gradient-to-r ${col.accentClass} bg-opacity-10`}>
               <span className="text-base" aria-hidden="true">{col.icon}</span>
-              <span className="font-semibold text-white text-sm">{col.label}</span>
+              <span className="font-semibold text-gray-900 text-sm">{col.label}</span>
               <span className={`ml-auto text-[10px] px-2 py-0.5 rounded-full border font-medium ${col.badgeClass}`}>
                 Top {col.books.length}
               </span>
@@ -242,12 +242,12 @@ function CategoryRankings({
                 <li key={book.id}>
                   <Link
                     href={`/truyen/${book.slug}`}
-                    className="flex items-center gap-3 px-4 py-2.5 hover:bg-white/5 transition-colors group"
+                    className="flex items-center gap-3 px-4 py-2.5 hover:bg-rose-50 transition-colors group"
                   >
                     {/* Rank */}
                     <span className={`w-5 text-center text-xs font-black shrink-0 ${
                       i === 0 ? 'text-yellow-400' :
-                      i === 1 ? 'text-gray-300' :
+                      i === 1 ? 'text-gray-600' :
                       i === 2 ? 'text-amber-600' :
                       'text-gray-600'
                     }`}>
@@ -255,7 +255,7 @@ function CategoryRankings({
                     </span>
 
                     {/* Thumbnail */}
-                    <div className="relative w-8 h-11 rounded overflow-hidden shrink-0 bg-gradient-to-br from-purple-900 to-indigo-900">
+                    <div className="relative w-8 h-11 rounded overflow-hidden shrink-0 bg-gradient-to-br from-rose-900 to-pink-950">
                       {book.img && (
                         <Image src={book.img} alt="" fill sizes="32px" className="object-cover" />
                       )}
@@ -263,7 +263,7 @@ function CategoryRankings({
 
                     {/* Info */}
                     <div className="flex-1 min-w-0">
-                      <p className="text-xs font-semibold text-gray-200 truncate leading-snug group-hover:text-white transition-colors">
+                      <p className="text-xs font-semibold text-gray-700 truncate leading-snug group-hover:text-gray-900 transition-colors">
                         {book.title}
                       </p>
                       <p className="text-[10px] text-gray-500 truncate mt-0.5">{book.author}</p>
@@ -271,7 +271,7 @@ function CategoryRankings({
 
                     {/* Metric */}
                     <div className="shrink-0 text-right">
-                      <p className="text-[10px] font-bold text-gray-300">{col.metric(book)}</p>
+                      <p className="text-[10px] font-bold text-gray-600">{col.metric(book)}</p>
                     </div>
                   </Link>
                 </li>
@@ -294,14 +294,14 @@ function Hero({ totalBooks, totalViews }: { totalBooks: number; totalViews: numb
       style={{ background: 'radial-gradient(ellipse 80% 120% at 50% 0%, #2d1b69 0%, #1a1a2e 60%, #0d0d1a 100%)' }}
       aria-label="WebTruyện banner"
     >
-      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[500px] h-[120px] rounded-full bg-purple-600/10 blur-3xl pointer-events-none" />
+      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[500px] h-[120px] rounded-full bg-rose-200/40 blur-3xl pointer-events-none" />
 
       <div className="relative max-w-2xl mx-auto text-center">
         <h1 className="text-3xl sm:text-4xl font-black tracking-tight mb-1.5"
-            style={{ background: 'linear-gradient(135deg, #fff 0%, #c4b5fd 50%, #818cf8 100%)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text' }}>
+            style={{ background: 'linear-gradient(135deg, #e11d74 0%, #f43f7e 50%, #fb7185 100%)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text' }}>
           🐧 WebTruyện
         </h1>
-        <p className="text-gray-400 text-sm mb-4">
+        <p className="text-gray-500 text-sm mb-4">
           Đọc truyện online miễn phí — {totalBooks.toLocaleString()}+ truyện · {formatViews(totalViews)} lượt đọc
         </p>
 
@@ -309,19 +309,19 @@ function Hero({ totalBooks, totalViews }: { totalBooks: number; totalViews: numb
           <Link
             href="/tim-kiem"
             className="px-5 py-2 rounded-lg font-semibold text-sm text-white transition-all hover:scale-105 active:scale-95"
-            style={{ background: 'linear-gradient(135deg, #7c3aed, #4f46e5)' }}
+            style={{ background: 'linear-gradient(135deg, #e11d74, #f43f7e)' }}
           >
             🔍 Tìm truyện
           </Link>
           <Link
             href="/bang-xep-hang"
-            className="px-5 py-2 rounded-lg font-semibold text-sm text-gray-300 border border-site-border hover:border-purple-600/60 hover:bg-purple-900/20 transition-all"
+            className="px-5 py-2 rounded-lg font-semibold text-sm text-gray-600 border border-site-border hover:border-rose-400 hover:bg-rose-100 transition-all"
           >
             🏆 Xếp hạng
           </Link>
           <Link
             href="/tu-sach"
-            className="px-5 py-2 rounded-lg font-semibold text-sm text-gray-300 border border-site-border hover:border-purple-600/60 hover:bg-purple-900/20 transition-all"
+            className="px-5 py-2 rounded-lg font-semibold text-sm text-gray-600 border border-site-border hover:border-rose-400 hover:bg-rose-100 transition-all"
           >
             📖 Tủ sách
           </Link>
@@ -336,7 +336,7 @@ function CategoryNav({ rootCats, subCats }: { rootCats: Category[]; subCats: Cat
   if (rootCats.length === 0) return null;
 
   const catColors: Record<number, string> = {
-    0: 'from-blue-700 to-indigo-700',
+    0: 'from-blue-700 to-fuchsia-700',
     1: 'from-pink-700 to-rose-700',
     2: 'from-emerald-700 to-teal-700',
     3: 'from-amber-700 to-orange-700',
@@ -364,7 +364,7 @@ function CategoryNav({ rootCats, subCats }: { rootCats: Category[]; subCats: Cat
                     {cat.icon}
                   </div>
                   <div className="min-w-0">
-                    <div className="font-bold text-white group-hover:text-purple-200 transition-colors">{cat.name}</div>
+                    <div className="font-bold text-gray-900 group-hover:text-pink-500 transition-colors">{cat.name}</div>
                     <div className="text-[11px] text-gray-500 truncate">
                       {children.slice(0, 3).map(c => c.name).join(' · ')}
                     </div>
@@ -387,8 +387,8 @@ function SectionHeader({
 }) {
   return (
     <div className="flex items-center gap-3 mb-4">
-      <div className="w-1 h-6 rounded-full bg-gradient-to-b from-purple-400 to-indigo-600 shrink-0" />
-      <h2 id={id} className="text-lg font-bold text-white flex items-center gap-2">
+      <div className="w-1 h-6 rounded-full bg-gradient-to-b from-pink-400 to-rose-500 shrink-0" />
+      <h2 id={id} className="text-lg font-bold text-gray-900 flex items-center gap-2">
         <span aria-hidden="true">{emoji}</span>
         {title}
       </h2>
@@ -396,7 +396,7 @@ function SectionHeader({
       {href && (
         <Link
           href={href}
-          className="shrink-0 text-xs text-purple-400 hover:text-white px-3 py-1 rounded-full border border-purple-800/50 hover:border-purple-500 hover:bg-purple-900/30 transition-all"
+          className="shrink-0 text-xs text-pink-600 hover:text-gray-900 px-3 py-1 rounded-full border border-rose-300 hover:border-rose-500 hover:bg-rose-200 transition-all"
         >
           {hrefLabel}
         </Link>
@@ -411,7 +411,7 @@ function FeaturedHeroCard({ book }: { book: Book }) {
     <article className="lg:col-span-3 group relative rounded-2xl overflow-hidden shadow-2xl min-h-[320px] sm:min-h-[380px]">
       <Link href={`/truyen/${book.slug}`} className="block h-full" aria-label={`Đọc truyện ${book.title}`}>
         {/* Background */}
-        <div className="absolute inset-0 bg-gradient-to-br from-violet-900 via-purple-900 to-indigo-900">
+        <div className="absolute inset-0 bg-gradient-to-br from-violet-900 via-rose-900 to-pink-950">
           {book.img && (
             <Image
               src={book.img}
@@ -430,41 +430,41 @@ function FeaturedHeroCard({ book }: { book: Book }) {
 
         {/* Hot badge */}
         <div className="absolute top-4 left-4">
-          <span className="glow-badge inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-bold bg-purple-600 text-white">
+          <span className="glow-badge inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-bold bg-rose-500 text-white">
             🔥 Phổ biến nhất
           </span>
         </div>
 
         {/* Content */}
         <div className="absolute bottom-0 left-0 right-0 p-5 sm:p-6">
-          <h3 className="text-2xl sm:text-3xl font-black text-white drop-shadow-lg leading-tight mb-2 group-hover:text-purple-200 transition-colors">
+          <h3 className="text-2xl sm:text-3xl font-black text-gray-900 drop-shadow-lg leading-tight mb-2 group-hover:text-pink-500 transition-colors">
             {book.title}
           </h3>
-          <p className="text-sm text-gray-300 mb-3">{book.author}</p>
+          <p className="text-sm text-gray-600 mb-3">{book.author}</p>
 
           <div className="flex flex-wrap gap-2 mb-3">
             <span className={`text-xs px-2 py-0.5 rounded-full font-medium ${
-              book.status === 'complete' ? 'bg-emerald-500/80 text-white' : 'bg-sky-500/80 text-white'
+              book.status === 'complete' ? 'bg-emerald-500/80 text-gray-900' : 'bg-sky-500/80 text-gray-900'
             }`}>
               {statusLabel(book.status)}
             </span>
             <span className="text-xs px-2 py-0.5 rounded-full bg-yellow-500/80 text-yellow-950 font-bold">
               ★ {book.rating.toFixed(1)}
             </span>
-            <span className="text-xs px-2 py-0.5 rounded-full bg-white/10 text-gray-200">
+            <span className="text-xs px-2 py-0.5 rounded-full bg-gray-100 text-gray-700">
               {book.chapters.toLocaleString()} chương
             </span>
-            <span className="text-xs px-2 py-0.5 rounded-full bg-white/10 text-gray-200">
+            <span className="text-xs px-2 py-0.5 rounded-full bg-gray-100 text-gray-700">
               👁 {formatViews(book.views)}
             </span>
           </div>
 
           {book.desc && (
-            <p className="text-xs text-gray-400 line-clamp-2 mb-4 max-w-lg">{book.desc}</p>
+            <p className="text-xs text-gray-500 line-clamp-2 mb-4 max-w-lg">{book.desc}</p>
           )}
 
           <span className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl text-sm font-semibold text-white transition-all group-hover:scale-105"
-                style={{ background: 'linear-gradient(135deg, #7c3aed, #4f46e5)' }}>
+                style={{ background: 'linear-gradient(135deg, #e11d74, #f43f7e)' }}>
             📖 Đọc ngay
           </span>
         </div>
@@ -476,7 +476,7 @@ function FeaturedHeroCard({ book }: { book: Book }) {
 /* ─── Rank row ────────────────────────────────────── */
 function RankRow({ book, rank, showRating }: { book: Book; rank: number; showRating?: boolean }) {
   const rankColor = rank === 1 ? 'text-yellow-400 font-black' :
-                    rank === 2 ? 'text-gray-300 font-black' :
+                    rank === 2 ? 'text-gray-600 font-black' :
                     rank === 3 ? 'text-amber-600 font-black' :
                     'text-gray-600 font-bold';
   return (
@@ -488,7 +488,7 @@ function RankRow({ book, rank, showRating }: { book: Book; rank: number; showRat
       <span className={`w-6 text-center text-sm shrink-0 ${rankColor}`}>{rank}</span>
 
       {/* Thumbnail */}
-      <div className="relative w-10 h-14 rounded-md overflow-hidden shrink-0 bg-gradient-to-br from-purple-900 to-indigo-900">
+      <div className="relative w-10 h-14 rounded-md overflow-hidden shrink-0 bg-gradient-to-br from-rose-900 to-pink-950">
         {book.img && (
           <Image src={book.img} alt="" fill sizes="40px" className="object-cover" />
         )}
@@ -496,7 +496,7 @@ function RankRow({ book, rank, showRating }: { book: Book; rank: number; showRat
 
       {/* Info */}
       <div className="flex-1 min-w-0">
-        <p className="text-sm font-semibold text-gray-200 truncate group-hover:text-purple-300 transition-colors leading-snug">
+        <p className="text-sm font-semibold text-gray-700 truncate group-hover:text-pink-600 transition-colors leading-snug">
           {book.title}
         </p>
         <p className="text-xs text-gray-500 truncate mt-0.5">{book.author}</p>

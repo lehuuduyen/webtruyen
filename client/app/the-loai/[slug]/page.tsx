@@ -70,11 +70,11 @@ export default async function GenrePage({ params }: Props) {
       <div className="flex items-center gap-3 mb-4 pb-4 border-b border-site-border">
         <span className="text-4xl shrink-0" aria-hidden="true">{cat.icon}</span>
         <div className="flex-1 min-w-0">
-          <h1 className="text-xl font-black text-white">{cat.name}</h1>
-          <div className="flex flex-wrap gap-3 mt-1 text-xs text-gray-400">
-            <span><strong className="text-white">{books.length}</strong> truyện</span>
-            <span className="text-sky-400"><strong>{ongoing}</strong> đang ra</span>
-            <span className="text-emerald-400"><strong>{complete}</strong> hoàn thành</span>
+          <h1 className="text-xl font-black text-gray-900">{cat.name}</h1>
+          <div className="flex flex-wrap gap-3 mt-1 text-xs text-gray-500">
+            <span><strong className="text-gray-900">{books.length}</strong> truyện</span>
+            <span className="text-sky-600"><strong>{ongoing}</strong> đang ra</span>
+            <span className="text-emerald-600"><strong>{complete}</strong> hoàn thành</span>
           </div>
         </div>
       </div>
@@ -84,7 +84,7 @@ export default async function GenrePage({ params }: Props) {
         <div className="flex flex-wrap gap-1.5 mb-5">
           <Link
             href={`/the-loai/${cat.slug}`}
-            className="px-2.5 py-1 rounded-full text-xs border border-purple-600/50 bg-purple-600/20 text-purple-300 font-medium"
+            className="px-2.5 py-1 rounded-full text-xs border border-rose-400 bg-rose-100 text-pink-600 font-medium"
           >
             Tất cả
           </Link>
@@ -92,7 +92,7 @@ export default async function GenrePage({ params }: Props) {
             <Link
               key={c.id}
               href={`/the-loai/${c.slug}`}
-              className="px-2.5 py-1 rounded-full text-xs border border-site-border text-gray-400 hover:text-white hover:border-purple-600/50 hover:bg-purple-900/20 transition-all"
+              className="px-2.5 py-1 rounded-full text-xs border border-site-border text-gray-500 hover:text-gray-900 hover:border-rose-400 hover:bg-rose-100 transition-all"
             >
               {c.name}
             </Link>

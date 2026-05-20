@@ -49,8 +49,8 @@ export default function BooksClient({ books }: { books: Book[] }) {
               onClick={() => setSort(t.key)}
               className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition-all ${
                 sort === t.key
-                  ? 'bg-purple-600 text-white shadow-lg shadow-purple-900/40'
-                  : 'bg-site-card border border-site-border text-gray-400 hover:text-white hover:border-purple-600/50'
+                  ? 'bg-rose-600 text-gray-900 shadow-lg shadow-rose-300/40'
+                  : 'bg-site-card border border-site-border text-gray-500 hover:text-gray-900 hover:border-rose-400'
               }`}
             >
               <span aria-hidden="true">{t.icon}</span>
@@ -70,7 +70,7 @@ export default function BooksClient({ books }: { books: Book[] }) {
               className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-all ${
                 status === s.key
                   ? 'bg-emerald-600/30 text-emerald-300 border border-emerald-600/50'
-                  : 'bg-site-card border border-site-border text-gray-400 hover:text-white hover:border-emerald-600/40'
+                  : 'bg-site-card border border-site-border text-gray-500 hover:text-gray-900 hover:border-emerald-600/40'
               }`}
             >
               {s.label}
@@ -99,12 +99,12 @@ export default function BooksClient({ books }: { books: Book[] }) {
 }
 
 function BookListRow({ book, rank }: { book: Book; rank: number }) {
-  const rankColor = rank === 1 ? 'text-yellow-400' : rank === 2 ? 'text-gray-300' : rank === 3 ? 'text-amber-600' : 'text-gray-600';
+  const rankColor = rank === 1 ? 'text-yellow-400' : rank === 2 ? 'text-gray-600' : rank === 3 ? 'text-amber-600' : 'text-gray-600';
 
   return (
     <Link
       href={`/truyen/${book.slug}`}
-      className="group flex items-start gap-3 p-3 rounded-xl border border-transparent hover:border-site-border hover:bg-site-card/50 transition-all"
+      className="group flex items-start gap-3 p-3 rounded-xl border border-transparent hover:border-site-border hover:bg-rose-50 transition-all"
     >
       {/* Rank */}
       <span className={`w-6 text-center text-sm font-black shrink-0 mt-1 tabular-nums ${rankColor}`}>
@@ -112,7 +112,7 @@ function BookListRow({ book, rank }: { book: Book; rank: number }) {
       </span>
 
       {/* Cover */}
-      <div className="relative w-12 h-16 rounded-lg overflow-hidden shrink-0 bg-gradient-to-br from-purple-900 to-indigo-900 shadow-md">
+      <div className="relative w-12 h-16 rounded-lg overflow-hidden shrink-0 bg-gradient-to-br from-rose-900 to-pink-950 shadow-md">
         {book.img && (
           <Image src={book.img} alt={`Ảnh bìa ${book.title}`} fill sizes="48px" className="object-cover group-hover:scale-105 transition-transform duration-500" />
         )}
@@ -121,11 +121,11 @@ function BookListRow({ book, rank }: { book: Book; rank: number }) {
       {/* Info */}
       <div className="flex-1 min-w-0">
         <div className="flex items-start justify-between gap-2">
-          <p className="text-sm font-bold text-gray-100 leading-snug group-hover:text-purple-300 transition-colors line-clamp-1">
+          <p className="text-sm font-bold text-gray-100 leading-snug group-hover:text-pink-600 transition-colors line-clamp-1">
             {book.title}
           </p>
           <div className="shrink-0 text-right">
-            <p className="text-xs font-bold text-gray-200">{formatViews(book.views)}</p>
+            <p className="text-xs font-bold text-gray-700">{formatViews(book.views)}</p>
             <p className="text-[10px] text-gray-500">lượt đọc</p>
           </div>
         </div>
@@ -141,8 +141,8 @@ function BookListRow({ book, rank }: { book: Book; rank: number }) {
         <div className="flex items-center gap-2 mt-1.5 flex-wrap">
           <span className={`text-[10px] px-1.5 py-0.5 rounded font-medium ${
             book.status === 'complete'
-              ? 'bg-emerald-500/20 text-emerald-400'
-              : 'bg-sky-500/20 text-sky-400'
+              ? 'bg-emerald-500/20 text-emerald-600'
+              : 'bg-sky-500/20 text-sky-600'
           }`}>
             {statusLabel(book.status)}
           </span>

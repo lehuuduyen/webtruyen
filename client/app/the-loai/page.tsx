@@ -48,8 +48,8 @@ export default async function GenreIndexPage() {
 
       {/* Page header */}
       <div className="mb-4">
-        <h1 className="text-lg sm:text-2xl font-black text-white">Tất Cả Thể Loại</h1>
-        <p className="text-gray-400 text-xs sm:text-sm mt-0.5">
+        <h1 className="text-lg sm:text-2xl font-black text-gray-900">Tất Cả Thể Loại</h1>
+        <p className="text-gray-500 text-xs sm:text-sm mt-0.5">
           {rootCats.length} nhóm · {subCats.length} thể loại · {books.length.toLocaleString()} truyện
         </p>
       </div>
@@ -70,9 +70,9 @@ export default async function GenreIndexPage() {
               <div className="flex items-center gap-2.5">
                 <span className="text-2xl" aria-hidden="true">{root.icon}</span>
                 <div>
-                  <h2 id={`cat-${root.id}`} className="text-sm font-bold text-white">{root.name}</h2>
+                  <h2 id={`cat-${root.id}`} className="text-sm font-bold text-gray-900">{root.name}</h2>
                   <p className="text-[11px] text-gray-500 mt-0.5">
-                    {total} truyện · <span className="text-sky-400">{ongoing} đang ra</span> · <span className="text-emerald-400">{complete} hoàn thành</span>
+                    {total} truyện · <span className="text-sky-600">{ongoing} đang ra</span> · <span className="text-emerald-600">{complete} hoàn thành</span>
                   </p>
                 </div>
               </div>
@@ -86,7 +86,7 @@ export default async function GenreIndexPage() {
             </div>
 
             {/* Sub tags + books */}
-            <div className="p-4 bg-site-card/20">
+            <div className="p-4 bg-rose-50/60">
               {/* Subcategory tags */}
               {children.length > 0 && (
                 <div className="flex flex-wrap gap-1.5 mb-4">
@@ -94,7 +94,7 @@ export default async function GenreIndexPage() {
                     <Link
                       key={c.id}
                       href={`/the-loai/${c.slug}`}
-                      className="px-2.5 py-1 rounded-full text-xs border border-site-border text-gray-400 hover:text-white hover:border-purple-600/50 hover:bg-purple-900/20 transition-all"
+                      className="px-2.5 py-1 rounded-full text-xs border border-site-border text-gray-500 hover:text-gray-900 hover:border-rose-400 hover:bg-rose-100 transition-all"
                     >
                       {c.name}
                     </Link>
@@ -122,7 +122,7 @@ function BookRow({ book, rank, accent }: { book: Book; rank: number; accent: str
   return (
     <Link
       href={`/truyen/${book.slug}`}
-      className="group flex items-center gap-2.5 p-2 rounded-xl border border-site-border bg-site-card/50 hover:border-purple-600/50 hover:bg-purple-900/10 transition-all"
+      className="group flex items-center gap-2.5 p-2 rounded-xl border border-site-border bg-rose-50 hover:border-rose-400 hover:bg-pink-50 transition-all"
     >
       <span
         className="w-5 text-center text-xs font-black shrink-0"
@@ -130,11 +130,11 @@ function BookRow({ book, rank, accent }: { book: Book; rank: number; accent: str
       >
         {rank}
       </span>
-      <div className="relative w-8 h-11 rounded overflow-hidden shrink-0 bg-gradient-to-br from-purple-900 to-indigo-900">
+      <div className="relative w-8 h-11 rounded overflow-hidden shrink-0 bg-gradient-to-br from-rose-900 to-pink-950">
         {book.img && <Image src={book.img} alt="" fill sizes="32px" className="object-cover" />}
       </div>
       <div className="flex-1 min-w-0">
-        <p className="text-xs font-semibold text-gray-200 truncate group-hover:text-purple-300 transition-colors">
+        <p className="text-xs font-semibold text-gray-700 truncate group-hover:text-pink-600 transition-colors">
           {book.title}
         </p>
         <p className="text-[10px] text-gray-500 truncate mt-0.5">{formatViews(book.views)} lượt</p>

@@ -50,21 +50,21 @@ export default function ReadingControls() {
     <div className="flex items-center gap-1">
       <button
         onClick={() => changeFont(-1)}
-        className="w-8 h-8 flex items-center justify-center text-xs bg-site-card border border-site-border rounded hover:border-purple-500 text-gray-300 hover:text-white transition-colors"
+        className="w-8 h-8 flex items-center justify-center text-xs bg-site-card border border-site-border rounded hover:border-rose-500 text-gray-600 hover:text-gray-900 transition-colors"
         aria-label="Giảm cỡ chữ"
       >
         A-
       </button>
       <button
         onClick={() => changeFont(1)}
-        className="w-8 h-8 flex items-center justify-center text-sm bg-site-card border border-site-border rounded hover:border-purple-500 text-gray-300 hover:text-white transition-colors"
+        className="w-8 h-8 flex items-center justify-center text-sm bg-site-card border border-site-border rounded hover:border-rose-500 text-gray-600 hover:text-gray-900 transition-colors"
         aria-label="Tăng cỡ chữ"
       >
         A+
       </button>
       <button
         onClick={cycleTheme}
-        className="w-8 h-8 flex items-center justify-center bg-site-card border border-site-border rounded hover:border-purple-500 transition-colors"
+        className="w-8 h-8 flex items-center justify-center bg-site-card border border-site-border rounded hover:border-rose-500 transition-colors"
         aria-label="Đổi màu nền"
         title={`Nền: ${theme}`}
       >

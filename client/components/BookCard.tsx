@@ -6,13 +6,13 @@ import { formatViews } from '@/lib/utils';
 // Generate a deterministic gradient color from book title
 function titleGradient(title: string) {
   const palettes = [
-    'from-violet-900 via-purple-800 to-indigo-900',
-    'from-blue-900 via-indigo-800 to-violet-900',
-    'from-rose-900 via-pink-800 to-purple-900',
+    'from-violet-900 via-rose-800 to-pink-950',
+    'from-blue-900 via-fuchsia-800 to-violet-900',
+    'from-rose-900 via-pink-800 to-rose-900',
     'from-amber-900 via-orange-800 to-red-900',
     'from-teal-900 via-emerald-800 to-cyan-900',
-    'from-indigo-900 via-blue-800 to-sky-900',
-    'from-fuchsia-900 via-purple-800 to-pink-900',
+    'from-pink-950 via-blue-800 to-sky-900',
+    'from-fuchsia-900 via-rose-800 to-pink-900',
     'from-cyan-900 via-teal-800 to-emerald-900',
   ];
   const idx = title.charCodeAt(0) % palettes.length;
@@ -23,7 +23,7 @@ export default function BookCard({ book, priority = false }: { book: Book; prior
   const initial = (book.title[0] || '?').toUpperCase();
 
   return (
-    <article className="group relative aspect-[2/3] rounded-xl overflow-hidden shadow-md hover:shadow-xl hover:shadow-purple-900/40 transition-all duration-300 hover:-translate-y-1">
+    <article className="group relative aspect-[2/3] rounded-xl overflow-hidden shadow-md hover:shadow-xl hover:shadow-rose-300/40 transition-all duration-300 hover:-translate-y-1">
       <Link href={`/truyen/${book.slug}`} className="block h-full" aria-label={`Đọc truyện ${book.title}`}>
 
         {/* Background image or gradient placeholder */}
@@ -67,7 +67,7 @@ export default function BookCard({ book, priority = false }: { book: Book; prior
 
         {/* Bottom info */}
         <div className="absolute bottom-0 left-0 right-0 p-2.5">
-          <h3 className="text-sm font-bold text-white leading-snug line-clamp-2 drop-shadow-sm group-hover:text-purple-200 transition-colors">
+          <h3 className="text-sm font-bold text-white leading-snug line-clamp-2 drop-shadow-sm group-hover:text-pink-500 transition-colors">
             {book.title}
           </h3>
           <p className="text-[11px] text-gray-300/80 truncate mt-0.5">{book.author}</p>

@@ -47,12 +47,12 @@ export default function SearchClient({
           autoFocus
           placeholder="Nhập tên truyện hoặc tác giả..."
           aria-label="Tìm kiếm truyện"
-          className="w-full max-w-xl bg-site-card border border-site-border rounded-xl px-5 py-3 text-white placeholder-gray-500 focus:outline-none focus:border-purple-500 focus:ring-1 focus:ring-purple-500 text-base"
+          className="w-full max-w-xl bg-site-card border border-site-border rounded-xl px-5 py-3 text-gray-900 placeholder-gray-500 focus:outline-none focus:border-rose-500 focus:ring-1 focus:ring-rose-500 text-base"
         />
       </div>
 
       {needle && (
-        <p className="text-sm text-gray-400 mb-4">
+        <p className="text-sm text-gray-500 mb-4">
           {results.length > 0
             ? `Tìm thấy ${results.length} kết quả cho "${query}"`
             : `Không tìm thấy kết quả cho "${query}"`}

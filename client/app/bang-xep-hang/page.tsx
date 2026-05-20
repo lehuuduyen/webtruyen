@@ -62,12 +62,12 @@ export default async function RankingPage() {
 
         <div className="relative max-w-7xl mx-auto px-4 py-8 sm:py-10">
           <div className="flex items-center gap-4">
-            <div className="w-12 h-12 sm:w-14 sm:h-14 rounded-2xl bg-purple-600/20 border border-purple-600/40 flex items-center justify-center text-2xl sm:text-3xl shrink-0">
+            <div className="w-12 h-12 sm:w-14 sm:h-14 rounded-2xl bg-rose-100 border border-rose-600/40 flex items-center justify-center text-2xl sm:text-3xl shrink-0">
               🏆
             </div>
             <div>
-              <h1 className="text-xl sm:text-3xl font-black text-white">Bảng Xếp Hạng</h1>
-              <p className="text-gray-400 text-sm mt-0.5">
+              <h1 className="text-xl sm:text-3xl font-black text-gray-900">Bảng Xếp Hạng</h1>
+              <p className="text-gray-500 text-sm mt-0.5">
                 Top {books.length.toLocaleString()} truyện · Cập nhật liên tục
               </p>
             </div>

@@ -96,13 +96,13 @@ export default async function ChapterPage({ params }: Props) {
       <ScrollToTop />
 
       {/* ── STICKY TOP BAR ── */}
-      <div className="doc-chrome sticky top-0 z-40 bg-[#16213e]/95 backdrop-blur-md border-b border-[#2a2a45] shadow-lg shadow-black/30">
+      <div className="doc-chrome sticky top-0 z-40 bg-[#16213e]/95 backdrop-blur-md border-b border-[#2a2a45] shadow-lg shadow-rose-200/50">
         <div className="max-w-7xl mx-auto px-4 h-12 flex items-center gap-3">
 
           {/* Back link */}
           <Link
             href={`/truyen/${slug}`}
-            className="flex items-center gap-1.5 text-sm text-gray-400 hover:text-white transition-colors shrink-0 group"
+            className="flex items-center gap-1.5 text-sm text-gray-500 hover:text-gray-900 transition-colors shrink-0 group"
             title={book.title}
           >
             <svg className="w-4 h-4 group-hover:-translate-x-0.5 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
@@ -113,8 +113,8 @@ export default async function ChapterPage({ params }: Props) {
 
           {/* Center: chapter progress (mobile) / title (desktop) */}
           <div className="flex-1 text-center min-w-0">
-            <span className="text-xs text-gray-400 sm:hidden">Ch.{chNum}/{chapters.length}</span>
-            <span className="text-sm text-gray-300 hidden md:inline truncate">{chapter.title}</span>
+            <span className="text-xs text-gray-500 sm:hidden">Ch.{chNum}/{chapters.length}</span>
+            <span className="text-sm text-gray-600 hidden md:inline truncate">{chapter.title}</span>
           </div>
 
           {/* Right: prev/next mini + settings */}
@@ -122,9 +122,9 @@ export default async function ChapterPage({ params }: Props) {
             <Link
               href={prevHref ?? '#'}
               aria-disabled={!prevHref}
-              className={`w-8 h-8 flex items-center justify-center rounded-lg border text-gray-400 transition-colors ${
+              className={`w-8 h-8 flex items-center justify-center rounded-lg border text-gray-500 transition-colors ${
                 prevHref
-                  ? 'border-[#2a2a45] hover:border-purple-500 hover:text-white'
+                  ? 'border-[#2a2a45] hover:border-rose-500 hover:text-gray-900'
                   : 'border-[#1a1a2e] text-gray-700 pointer-events-none'
               }`}
               title={prevCh ? `← ${prevCh.title}` : undefined}
@@ -136,9 +136,9 @@ export default async function ChapterPage({ params }: Props) {
             <Link
               href={nextHref ?? '#'}
               aria-disabled={!nextHref}
-              className={`w-8 h-8 flex items-center justify-center rounded-lg border text-gray-400 transition-colors ${
+              className={`w-8 h-8 flex items-center justify-center rounded-lg border text-gray-500 transition-colors ${
                 nextHref
-                  ? 'border-[#2a2a45] hover:border-purple-500 hover:text-white'
+                  ? 'border-[#2a2a45] hover:border-rose-500 hover:text-gray-900'
                   : 'border-[#1a1a2e] text-gray-700 pointer-events-none'
               }`}
               title={nextCh ? `${nextCh.title} →` : undefined}
@@ -157,7 +157,7 @@ export default async function ChapterPage({ params }: Props) {
       <nav className="sm:hidden fixed bottom-0 inset-x-0 z-50 bg-[#16213e]/97 backdrop-blur-md border-t border-[#2a2a45] shadow-[0_-4px_24px_rgba(0,0,0,0.4)]">
         <div className="grid grid-cols-3 h-14">
           {prevHref ? (
-            <Link href={prevHref} className="flex flex-col items-center justify-center gap-0.5 text-gray-400 hover:text-white active:bg-white/5 transition-colors">
+            <Link href={prevHref} className="flex flex-col items-center justify-center gap-0.5 text-gray-500 hover:text-gray-900 active:bg-gray-50 transition-colors">
               <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
                 <path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7"/>
               </svg>
@@ -171,14 +171,14 @@ export default async function ChapterPage({ params }: Props) {
               <span className="text-[10px]">Trước</span>
             </div>
           )}
-          <Link href={`/truyen/${slug}`} className="flex flex-col items-center justify-center gap-0.5 text-gray-400 hover:text-white active:bg-white/5 transition-colors border-x border-[#2a2a45]">
+          <Link href={`/truyen/${slug}`} className="flex flex-col items-center justify-center gap-0.5 text-gray-500 hover:text-gray-900 active:bg-gray-50 transition-colors border-x border-[#2a2a45]">
             <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
               <path strokeLinecap="round" strokeLinejoin="round" d="M4 6h16M4 10h16M4 14h16M4 18h7"/>
             </svg>
             <span className="text-[10px]">Mục lục</span>
           </Link>
           {nextHref ? (
-            <Link href={nextHref} className="flex flex-col items-center justify-center gap-0.5 text-purple-400 hover:text-purple-300 active:bg-purple-900/20 transition-colors">
+            <Link href={nextHref} className="flex flex-col items-center justify-center gap-0.5 text-pink-600 hover:text-pink-600 active:bg-rose-100 transition-colors">
               <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
                 <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7"/>
               </svg>
@@ -207,7 +207,7 @@ export default async function ChapterPage({ params }: Props) {
           <header className="text-center mb-10">
             <Link
               href={`/truyen/${slug}`}
-              className="inline-flex items-center gap-2 text-purple-400 hover:text-purple-300 text-sm transition-colors mb-3 group"
+              className="inline-flex items-center gap-2 text-pink-600 hover:text-pink-600 text-sm transition-colors mb-3 group"
             >
               {book.img && (
                 <span className="relative w-5 h-7 rounded overflow-hidden shrink-0 inline-block">
@@ -217,7 +217,7 @@ export default async function ChapterPage({ params }: Props) {
               {book.title}
             </Link>
 
-            <h1 className="text-xl sm:text-2xl font-bold text-white leading-snug mb-2">
+            <h1 className="text-xl sm:text-2xl font-bold text-gray-900 leading-snug mb-2">
               {chapter.title}
             </h1>
 
@@ -233,7 +233,7 @@ export default async function ChapterPage({ params }: Props) {
               <span>Chương {chNum}/{chapters.length}</span>
             </div>
 
-            <div className="mt-4 h-px bg-gradient-to-r from-transparent via-purple-700/50 to-transparent" />
+            <div className="mt-4 h-px bg-gradient-to-r from-transparent via-rose-700/50 to-transparent" />
           </header>
 
           {/* ── Navigation top ── */}
@@ -250,7 +250,7 @@ export default async function ChapterPage({ params }: Props) {
           />
 
           {/* ── Navigation bottom ── */}
-          <div className="mt-4 mb-10 h-px bg-gradient-to-r from-transparent via-purple-700/50 to-transparent" />
+          <div className="mt-4 mb-10 h-px bg-gradient-to-r from-transparent via-rose-700/50 to-transparent" />
           <ChapterNav
             slug={slug}
             prevCh={prevCh ? { ch: prevCh.ch, title: prevCh.title } : null}
@@ -260,11 +260,11 @@ export default async function ChapterPage({ params }: Props) {
           {/* ── Chapter list ── */}
           <div className="mt-12 rounded-2xl overflow-hidden border border-[#2a2a45] bg-[#1a1a2e]/50">
             <div className="px-4 py-3 border-b border-[#2a2a45] flex items-center justify-between">
-              <h2 className="text-sm font-bold text-white">
+              <h2 className="text-sm font-bold text-gray-900">
                 Danh Sách Chương
                 <span className="ml-2 text-xs text-gray-500 font-normal">({chapters.length})</span>
               </h2>
-              <Link href={`/truyen/${slug}`} className="text-xs text-purple-400 hover:text-purple-300 transition-colors">
+              <Link href={`/truyen/${slug}`} className="text-xs text-pink-600 hover:text-pink-600 transition-colors">
                 Trang truyện →
               </Link>
             </div>
@@ -301,15 +301,15 @@ function ChapterNav({
       {prevCh ? (
         <Link
           href={`/truyen/${slug}/chuong/${prevCh.ch}`}
-          className="group flex flex-col items-start px-4 py-3 rounded-xl border border-[#2a2a45] hover:border-purple-500 hover:bg-purple-900/10 transition-all"
+          className="group flex flex-col items-start px-4 py-3 rounded-xl border border-[#2a2a45] hover:border-rose-500 hover:bg-pink-50 transition-all"
         >
-          <span className="flex items-center gap-1 text-[10px] text-gray-600 mb-0.5 group-hover:text-purple-400 transition-colors">
+          <span className="flex items-center gap-1 text-[10px] text-gray-600 mb-0.5 group-hover:text-pink-600 transition-colors">
             <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
               <path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7"/>
             </svg>
             Chương trước
           </span>
-          <span className="text-xs text-gray-300 group-hover:text-white transition-colors truncate w-full">
+          <span className="text-xs text-gray-600 group-hover:text-gray-900 transition-colors truncate w-full">
             {prevCh.title}
           </span>
         </Link>
@@ -318,7 +318,7 @@ function ChapterNav({
       {/* Mục lục */}
       <Link
         href={`/truyen/${slug}`}
-        className="flex flex-col items-center gap-0.5 px-3 py-3 rounded-xl border border-[#2a2a45] hover:border-purple-500 hover:bg-purple-900/10 transition-all text-center"
+        className="flex flex-col items-center gap-0.5 px-3 py-3 rounded-xl border border-[#2a2a45] hover:border-rose-500 hover:bg-pink-50 transition-all text-center"
       >
         <svg className="w-4 h-4 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
           <path strokeLinecap="round" strokeLinejoin="round" d="M4 6h16M4 10h16M4 14h16M4 18h7"/>
@@ -330,15 +330,15 @@ function ChapterNav({
       {nextCh ? (
         <Link
           href={`/truyen/${slug}/chuong/${nextCh.ch}`}
-          className="group flex flex-col items-end px-4 py-3 rounded-xl border border-[#2a2a45] hover:border-purple-500 hover:bg-purple-900/10 transition-all"
+          className="group flex flex-col items-end px-4 py-3 rounded-xl border border-[#2a2a45] hover:border-rose-500 hover:bg-pink-50 transition-all"
         >
-          <span className="flex items-center gap-1 text-[10px] text-gray-600 mb-0.5 group-hover:text-purple-400 transition-colors">
+          <span className="flex items-center gap-1 text-[10px] text-gray-600 mb-0.5 group-hover:text-pink-600 transition-colors">
             Chương tiếp
             <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
               <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7"/>
             </svg>
           </span>
-          <span className="text-xs text-gray-300 group-hover:text-white transition-colors truncate w-full text-right">
+          <span className="text-xs text-gray-600 group-hover:text-gray-900 transition-colors truncate w-full text-right">
             {nextCh.title}
           </span>
         </Link>

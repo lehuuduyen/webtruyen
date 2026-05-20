@@ -27,7 +27,7 @@ const MEDALS = ['🥇', '🥈', '🥉'];
 const COL_ACCENT: Record<string, { border: string; bg: string; text: string }> = {
   hot:      { border: 'border-orange-600/50', bg: 'bg-orange-600/10', text: 'text-orange-400' },
   newest:   { border: 'border-blue-600/50',   bg: 'bg-blue-600/10',   text: 'text-blue-400'   },
-  complete: { border: 'border-emerald-600/50', bg: 'bg-emerald-600/10', text: 'text-emerald-400' },
+  complete: { border: 'border-emerald-600/50', bg: 'bg-emerald-600/10', text: 'text-emerald-600' },
 };
 
 function getMetric(book: Book, type: MetricType): { value: string; label: string } {
@@ -60,8 +60,8 @@ export default function RankClient({ columns, categories, rootCats }: Props) {
             onClick={() => setActiveCat('all')}
             className={`px-3 py-1 rounded-full text-xs font-medium transition-all ${
               activeCat === 'all'
-                ? 'bg-purple-600/30 text-purple-200 border border-purple-600/60'
-                : 'bg-site-card border border-site-border text-gray-400 hover:text-white hover:border-purple-600/40'
+                ? 'bg-rose-600/30 text-pink-500 border border-rose-600/60'
+                : 'bg-site-card border border-site-border text-gray-500 hover:text-gray-900 hover:border-rose-600/40'
             }`}
           >
             Tất cả
@@ -72,8 +72,8 @@ export default function RankClient({ columns, categories, rootCats }: Props) {
               onClick={() => setActiveCat(activeCat === cat.slug ? 'all' : cat.slug)}
               className={`flex items-center gap-1 px-3 py-1 rounded-full text-xs font-medium transition-all ${
                 activeCat === cat.slug
-                  ? 'bg-purple-600/30 text-purple-200 border border-purple-600/60'
-                  : 'bg-site-card border border-site-border text-gray-400 hover:text-white hover:border-purple-600/40'
+                  ? 'bg-rose-600/30 text-pink-500 border border-rose-600/60'
+                  : 'bg-site-card border border-site-border text-gray-500 hover:text-gray-900 hover:border-rose-600/40'
               }`}
             >
               <span aria-hidden="true">{cat.icon}</span>
@@ -94,7 +94,7 @@ export default function RankClient({ columns, categories, rootCats }: Props) {
               className={`flex-1 flex items-center justify-center gap-1.5 py-2 rounded-xl text-xs font-bold transition-all border ${
                 activeCol === col.id
                   ? `${accent.bg} ${accent.border} ${accent.text}`
-                  : 'bg-site-card border-site-border text-gray-500 hover:text-white'
+                  : 'bg-site-card border-site-border text-gray-500 hover:text-gray-900'
               }`}
             >
               <span>{col.icon}</span>
@@ -146,7 +146,7 @@ function RankRow({ book, rank, metricType }: { book: Book; rank: number; metricT
     <li>
       <Link
         href={`/truyen/${book.slug}`}
-        className={`flex items-center gap-2.5 px-3 py-2.5 hover:bg-white/5 active:bg-white/10 transition-colors group ${
+        className={`flex items-center gap-2.5 px-3 py-2.5 hover:bg-rose-50 active:bg-gray-100 transition-colors group ${
           isMedal ? 'bg-white/[0.02]' : ''
         }`}
       >
@@ -157,14 +157,14 @@ function RankRow({ book, rank, metricType }: { book: Book; rank: number; metricT
           </span>
         ) : (
           <span className={`w-7 text-center text-xs font-black shrink-0 tabular-nums ${
-            rank <= 10 ? 'text-purple-400' : 'text-gray-600'
+            rank <= 10 ? 'text-pink-600' : 'text-gray-600'
           }`}>
             {rank}
           </span>
         )}
 
         {/* Cover */}
-        <div className="relative w-9 h-12 rounded-md overflow-hidden shrink-0 bg-gradient-to-br from-purple-900 to-indigo-900">
+        <div className="relative w-9 h-12 rounded-md overflow-hidden shrink-0 bg-gradient-to-br from-rose-900 to-pink-950">
           {book.img && (
             <Image src={book.img} alt="" fill sizes="36px" className="object-cover group-hover:scale-110 transition-transform duration-500" />
           )}
@@ -172,7 +172,7 @@ function RankRow({ book, rank, metricType }: { book: Book; rank: number; metricT
 
         {/* Info */}
         <div className="flex-1 min-w-0">
-          <p className="text-xs font-semibold text-gray-200 truncate group-hover:text-purple-300 transition-colors leading-snug">
+          <p className="text-xs font-semibold text-gray-700 truncate group-hover:text-pink-600 transition-colors leading-snug">
             {book.title}
           </p>
           <p className="text-[10px] text-gray-500 truncate mt-0.5">{book.author}</p>
@@ -180,7 +180,7 @@ function RankRow({ book, rank, metricType }: { book: Book; rank: number; metricT
 
         {/* Metric */}
         <div className="shrink-0 text-right">
-          <p className="text-xs font-bold text-gray-300">{m.value}</p>
+          <p className="text-xs font-bold text-gray-600">{m.value}</p>
           <p className="text-[10px] text-gray-600">{m.label}</p>
         </div>
       </Link>

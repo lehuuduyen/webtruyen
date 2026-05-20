@@ -1,6 +1,0 @@
-{
-  "/page": "app/page.js",
-  "/_not-found/page": "app/_not-found/page.js",
-  "/the-loai/[slug]/page": "app/the-loai/[slug]/page.js",
-  "/the-loai/page": "app/the-loai/page.js"
-}

@@ -26,8 +26,8 @@ export default function MobileCategorySidebar({
         href="/the-loai"
         className={`py-3 px-2 text-[11px] font-semibold leading-snug text-center transition-all border-r-2 ${
           isAll
-            ? 'text-purple-300 border-purple-500 bg-purple-900/30'
-            : 'text-gray-500 border-transparent hover:text-gray-300'
+            ? 'text-pink-600 border-rose-500 bg-rose-200'
+            : 'text-gray-500 border-transparent hover:text-gray-600'
         }`}
       >
         Tất cả
@@ -44,8 +44,8 @@ export default function MobileCategorySidebar({
               href={`/the-loai/${cat.slug}`}
               className={`flex flex-col items-center gap-0.5 py-3 px-1 text-center transition-all border-r-2 ${
                 rootActive
-                  ? 'text-white border-purple-500 bg-purple-900/30'
-                  : 'text-gray-400 border-transparent hover:text-gray-200 hover:bg-white/5'
+                  ? 'text-gray-900 border-rose-500 bg-rose-200'
+                  : 'text-gray-500 border-transparent hover:text-gray-700 hover:bg-rose-50'
               }`}
             >
               <span className="text-base leading-none">{cat.icon}</span>
@@ -61,8 +61,8 @@ export default function MobileCategorySidebar({
                   href={`/the-loai/${child.slug}`}
                   className={`block py-2.5 px-2 text-[10px] leading-snug text-center transition-all border-r-2 ${
                     childActive
-                      ? 'text-purple-300 border-purple-500 bg-purple-900/20'
-                      : 'text-gray-600 border-transparent hover:text-gray-300 hover:bg-white/5'
+                      ? 'text-pink-600 border-rose-500 bg-rose-100'
+                      : 'text-gray-600 border-transparent hover:text-gray-600 hover:bg-rose-50'
                   }`}
                 >
                   {child.name}

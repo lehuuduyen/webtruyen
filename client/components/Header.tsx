@@ -32,13 +32,13 @@ export default function Header({ categories }: { categories: Category[] }) {
   useEffect(() => { setMobileOpen(false); setGenreOpen(false); }, []);
 
   return (
-    <header className="sticky top-0 z-50 bg-site-header border-b border-site-border shadow-lg shadow-black/30">
+    <header className="sticky top-0 z-50 bg-site-header border-b border-site-border shadow-lg shadow-rose-200/50">
       <div className="max-w-7xl mx-auto px-4 h-14 flex items-center gap-3">
 
         {/* Logo */}
         <Link href="/" className="flex items-center gap-1.5 shrink-0 group" aria-label="WebTruyện">
           <span className="text-xl leading-none">🐧</span>
-          <span className="text-base font-bold text-white group-hover:text-purple-300 transition-colors hidden sm:block">
+          <span className="text-base font-bold text-gray-900 group-hover:text-pink-600 transition-colors hidden sm:block">
             WebTruyện
           </span>
         </Link>
@@ -52,12 +52,12 @@ export default function Header({ categories }: { categories: Category[] }) {
               onChange={e => setQuery(e.target.value)}
               placeholder="Tìm kiếm truyện, tác giả..."
               aria-label="Tìm kiếm truyện"
-              className="w-full bg-site-bg border border-site-border rounded-lg px-3 py-1.5 pr-9 text-sm text-white placeholder-gray-500 focus:outline-none focus:border-purple-500 focus:ring-1 focus:ring-purple-500"
+              className="w-full bg-site-bg border border-site-border rounded-lg px-3 py-1.5 pr-9 text-sm text-gray-900 placeholder-gray-500 focus:outline-none focus:border-rose-500 focus:ring-1 focus:ring-rose-500"
             />
             <button
               type="submit"
               aria-label="Tìm kiếm"
-              className="absolute right-2 top-1/2 -translate-y-1/2 text-gray-400 hover:text-white transition-colors"
+              className="absolute right-2 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-900 transition-colors"
             >
               🔍
             </button>
@@ -70,17 +70,17 @@ export default function Header({ categories }: { categories: Category[] }) {
           <div ref={genreRef} className="relative">
             <button
               onClick={() => setGenreOpen(v => !v)}
-              className="flex items-center gap-1 text-sm text-gray-300 hover:text-white transition-colors px-3 py-1.5 rounded hover:bg-site-card"
+              className="flex items-center gap-1 text-sm text-gray-600 hover:text-gray-900 transition-colors px-3 py-1.5 rounded hover:bg-site-card"
             >
               📚 Thể loại
               <span className={`text-xs transition-transform ${genreOpen ? 'rotate-180' : ''}`}>▾</span>
             </button>
             {genreOpen && (
-              <div className="absolute left-0 top-full mt-1 w-64 bg-site-card border border-site-border rounded-lg shadow-xl shadow-black/50 py-2 grid grid-cols-2 gap-0.5">
+              <div className="absolute left-0 top-full mt-1 w-64 bg-site-card border border-site-border rounded-lg shadow-xl shadow-rose-300/50 py-2 grid grid-cols-2 gap-0.5">
                 <Link
                   href="/the-loai"
                   onClick={() => setGenreOpen(false)}
-                  className="col-span-2 px-3 py-1.5 text-xs text-purple-400 hover:text-white hover:bg-purple-600/20 font-semibold"
+                  className="col-span-2 px-3 py-1.5 text-xs text-pink-600 hover:text-gray-900 hover:bg-rose-100 font-semibold"
                 >
                   Tất cả thể loại →
                 </Link>
@@ -89,7 +89,7 @@ export default function Header({ categories }: { categories: Category[] }) {
                     key={cat.id}
                     href={`/the-loai/${cat.slug}`}
                     onClick={() => setGenreOpen(false)}
-                    className="flex items-center gap-1.5 px-3 py-1.5 text-xs text-gray-300 hover:text-white hover:bg-purple-600/20 rounded"
+                    className="flex items-center gap-1.5 px-3 py-1.5 text-xs text-gray-600 hover:text-gray-900 hover:bg-rose-100 rounded"
                   >
                     <span aria-hidden="true">{cat.icon}</span>
                     {cat.name}
@@ -101,13 +101,13 @@ export default function Header({ categories }: { categories: Category[] }) {
 
           <Link
             href="/bang-xep-hang"
-            className="flex items-center gap-1 text-sm text-gray-300 hover:text-white transition-colors px-3 py-1.5 rounded hover:bg-site-card"
+            className="flex items-center gap-1 text-sm text-gray-600 hover:text-gray-900 transition-colors px-3 py-1.5 rounded hover:bg-site-card"
           >
             🏆 Xếp hạng
           </Link>
           <Link
             href="/tu-sach"
-            className="flex items-center gap-1 text-sm text-gray-300 hover:text-white transition-colors px-3 py-1.5 rounded hover:bg-site-card"
+            className="flex items-center gap-1 text-sm text-gray-600 hover:text-gray-900 transition-colors px-3 py-1.5 rounded hover:bg-site-card"
           >
             📖 Tủ sách
           </Link>
@@ -118,7 +118,7 @@ export default function Header({ categories }: { categories: Category[] }) {
           onClick={() => setMobileOpen(v => !v)}
           aria-expanded={mobileOpen}
           aria-label="Mở menu"
-          className="sm:hidden ml-auto p-2 text-gray-300 hover:text-white"
+          className="sm:hidden ml-auto p-2 text-gray-600 hover:text-gray-900"
         >
           {mobileOpen ? '✕' : '☰'}
         </button>
@@ -129,17 +129,17 @@ export default function Header({ categories }: { categories: Category[] }) {
         <nav aria-label="Menu di động" className="sm:hidden border-t border-site-border bg-site-card">
           <ul className="px-4 py-2 space-y-0.5">
             <li>
-              <Link href="/the-loai" className="flex items-center gap-2 py-2 text-sm text-gray-300 hover:text-white">
+              <Link href="/the-loai" className="flex items-center gap-2 py-2 text-sm text-gray-600 hover:text-gray-900">
                 📚 Thể loại
               </Link>
             </li>
             <li>
-              <Link href="/bang-xep-hang" className="flex items-center gap-2 py-2 text-sm text-gray-300 hover:text-white">
+              <Link href="/bang-xep-hang" className="flex items-center gap-2 py-2 text-sm text-gray-600 hover:text-gray-900">
                 🏆 Xếp hạng
               </Link>
             </li>
             <li>
-              <Link href="/tu-sach" className="flex items-center gap-2 py-2 text-sm text-gray-300 hover:text-white">
+              <Link href="/tu-sach" className="flex items-center gap-2 py-2 text-sm text-gray-600 hover:text-gray-900">
                 📖 Tủ sách
           </Link>
             </li>
@@ -150,7 +150,7 @@ export default function Header({ categories }: { categories: Category[] }) {
               <li key={cat.id}>
                 <Link
                   href={`/the-loai/${cat.slug}`}
-                  className="flex items-center gap-2 py-1.5 text-sm text-gray-300 hover:text-white"
+                  className="flex items-center gap-2 py-1.5 text-sm text-gray-600 hover:text-gray-900"
                 >
                   <span aria-hidden="true">{cat.icon}</span>
                   {cat.name}

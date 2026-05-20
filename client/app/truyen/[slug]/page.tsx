@@ -124,17 +124,17 @@ export default async function BookPage({ params }: Props) {
         {/* Breadcrumb */}
         <div className="relative max-w-6xl mx-auto px-4 pt-4">
           <nav aria-label="Breadcrumb" className="text-xs text-gray-500 flex flex-wrap items-center gap-1 mb-6">
-            <Link href="/" className="hover:text-purple-400 transition-colors">Trang Chủ</Link>
+            <Link href="/" className="hover:text-pink-600 transition-colors">Trang Chủ</Link>
             {primaryCat && (
               <>
                 <span className="text-gray-700">›</span>
-                <Link href={`/the-loai/${primaryCat.slug}`} className="hover:text-purple-400 transition-colors">
+                <Link href={`/the-loai/${primaryCat.slug}`} className="hover:text-pink-600 transition-colors">
                   {primaryCat.name}
                 </Link>
               </>
             )}
             <span className="text-gray-700">›</span>
-            <span className="text-gray-300 truncate max-w-[200px]">{book.title}</span>
+            <span className="text-gray-600 truncate max-w-[200px]">{book.title}</span>
           </nav>
 
           {/* Hero content */}
@@ -153,8 +153,8 @@ export default async function BookPage({ params }: Props) {
                     priority
                   />
                 ) : (
-                  <div className="absolute inset-0 bg-gradient-to-br from-violet-900 via-purple-900 to-indigo-900 flex items-center justify-center">
-                    <span className="text-6xl font-black text-white/10 select-none">
+                  <div className="absolute inset-0 bg-gradient-to-br from-violet-900 via-rose-900 to-pink-950 flex items-center justify-center">
+                    <span className="text-6xl font-black text-gray-900/10 select-none">
                       {book.title[0]}
                     </span>
                   </div>
@@ -171,7 +171,7 @@ export default async function BookPage({ params }: Props) {
                     <Link
                       key={cat.id}
                       href={`/the-loai/${cat.slug}`}
-                      className="text-[11px] px-2.5 py-0.5 rounded-full border border-purple-700/50 bg-purple-900/30 text-purple-300 hover:bg-purple-700/40 transition-colors"
+                      className="text-[11px] px-2.5 py-0.5 rounded-full border border-rose-700/50 bg-rose-200 text-pink-600 hover:bg-rose-700/40 transition-colors"
                     >
                       {cat.icon} {cat.name}
                     </Link>
@@ -179,11 +179,11 @@ export default async function BookPage({ params }: Props) {
                 </div>
               )}
 
-              <h1 className="text-lg sm:text-4xl font-black text-white leading-tight mb-1 drop-shadow-lg">
+              <h1 className="text-lg sm:text-4xl font-black text-gray-900 leading-tight mb-1 drop-shadow-lg">
                 {book.title}
               </h1>
-              <p className="text-gray-400 text-xs sm:text-sm mb-2 sm:mb-4">
-                Tác giả: <span className="text-gray-200 font-medium">{book.author}</span>
+              <p className="text-gray-500 text-xs sm:text-sm mb-2 sm:mb-4">
+                Tác giả: <span className="text-gray-700 font-medium">{book.author}</span>
               </p>
 
               {/* Star rating */}
@@ -224,8 +224,8 @@ export default async function BookPage({ params }: Props) {
                 {firstCh && (
                   <Link
                     href={`/truyen/${slug}/chuong/${firstCh.ch}`}
-                    className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-bold text-white transition-all hover:scale-105 active:scale-95 shadow-lg"
-                    style={{ background: 'linear-gradient(135deg, #7c3aed, #4f46e5)' }}
+                    className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-bold text-gray-900 transition-all hover:scale-105 active:scale-95 shadow-lg"
+                    style={{ background: 'linear-gradient(135deg, #e11d74, #f43f7e)' }}
                   >
                     <span>📖</span> Đọc từ đầu
                   </Link>
@@ -233,7 +233,7 @@ export default async function BookPage({ params }: Props) {
                 {lastCh && lastCh.ch !== firstCh?.ch && (
                   <Link
                     href={`/truyen/${slug}/chuong/${lastCh.ch}`}
-                    className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-bold text-gray-200 border border-white/20 bg-white/5 hover:bg-white/10 transition-all"
+                    className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-bold text-gray-700 border border-white/20 bg-gray-50 hover:bg-gray-100 transition-all"
                   >
                     <span>⚡</span> Chương mới nhất
                   </Link>
@@ -256,8 +256,8 @@ export default async function BookPage({ params }: Props) {
             {book.desc && (
               <section aria-labelledby="desc-heading">
                 <SectionLabel id="desc-heading" text="Giới Thiệu" />
-                <div className="bg-site-card/50 border border-site-border rounded-2xl p-5">
-                  <p className="text-gray-300 text-sm leading-[1.9]">{book.desc}</p>
+                <div className="bg-rose-50 border border-site-border rounded-2xl p-5">
+                  <p className="text-gray-600 text-sm leading-[1.9]">{book.desc}</p>
                 </div>
               </section>
             )}
@@ -274,7 +274,7 @@ export default async function BookPage({ params }: Props) {
                   {firstCh && (
                     <Link
                       href={`/truyen/${slug}/chuong/${firstCh.ch}`}
-                      className="text-xs px-3 py-1.5 rounded-lg bg-purple-900/30 border border-purple-700/40 text-purple-300 hover:bg-purple-700/30 transition-colors"
+                      className="text-xs px-3 py-1.5 rounded-lg bg-rose-200 border border-rose-700/40 text-pink-600 hover:bg-rose-700/30 transition-colors"
                     >
                       ↩ Chương đầu
                     </Link>
@@ -312,13 +312,13 @@ export default async function BookPage({ params }: Props) {
             {/* Book stats card */}
             <div className="bg-site-card border border-site-border rounded-2xl overflow-hidden">
               <div className="px-4 py-3 border-b border-site-border">
-                <h3 className="text-sm font-bold text-white">Thông Tin Truyện</h3>
+                <h3 className="text-sm font-bold text-gray-900">Thông Tin Truyện</h3>
               </div>
               <dl className="divide-y divide-site-border/50">
                 {[
                   { label: 'Tác giả',      value: book.author },
                   { label: 'Trạng thái',   value: statusLabel(book.status),
-                    accent: book.status === 'complete' ? 'text-emerald-400' : 'text-sky-400' },
+                    accent: book.status === 'complete' ? 'text-emerald-600' : 'text-sky-600' },
                   { label: 'Số chương',    value: book.chapters.toLocaleString() },
                   { label: 'Đánh giá',     value: `⭐ ${book.rating.toFixed(1)} / 5.0`, accent: 'text-yellow-400' },
                   { label: 'Lượt đọc',     value: formatViews(book.views) },
@@ -326,7 +326,7 @@ export default async function BookPage({ params }: Props) {
                 ].map(row => (
                   <div key={row.label} className="flex items-center justify-between px-4 py-2.5 gap-3">
                     <dt className="text-xs text-gray-500 shrink-0">{row.label}</dt>
-                    <dd className={`text-xs font-medium text-right truncate ${row.accent ?? 'text-gray-200'}`}>
+                    <dd className={`text-xs font-medium text-right truncate ${row.accent ?? 'text-gray-700'}`}>
                       {row.value}
                     </dd>
                   </div>
@@ -337,13 +337,13 @@ export default async function BookPage({ params }: Props) {
             {/* Thể loại */}
             {bookCats.length > 0 && (
               <div className="bg-site-card border border-site-border rounded-2xl p-4">
-                <h3 className="text-sm font-bold text-white mb-3">Thể Loại</h3>
+                <h3 className="text-sm font-bold text-gray-900 mb-3">Thể Loại</h3>
                 <div className="flex flex-wrap gap-2">
                   {bookCats.map(cat => (
                     <Link
                       key={cat.id}
                       href={`/the-loai/${cat.slug}`}
-                      className="flex items-center gap-1.5 text-xs px-3 py-1.5 rounded-full border border-purple-700/50 bg-purple-900/20 text-purple-300 hover:bg-purple-700/30 transition-colors"
+                      className="flex items-center gap-1.5 text-xs px-3 py-1.5 rounded-full border border-rose-700/50 bg-rose-100 text-pink-600 hover:bg-rose-700/30 transition-colors"
                     >
                       <span>{cat.icon}</span>
                       <span>{cat.name}</span>
@@ -357,17 +357,17 @@ export default async function BookPage({ params }: Props) {
             {chapters.length > 0 && (
               <div className="bg-site-card border border-site-border rounded-2xl overflow-hidden">
                 <div className="px-4 py-3 border-b border-site-border flex items-center justify-between">
-                  <h3 className="text-sm font-bold text-white">Chương Mới Nhất</h3>
+                  <h3 className="text-sm font-bold text-gray-900">Chương Mới Nhất</h3>
                 </div>
                 <div className="divide-y divide-site-border/50">
                   {[...chapters].slice(-5).reverse().map(ch => (
                     <Link
                       key={ch.ch}
                       href={`/truyen/${slug}/chuong/${ch.ch}`}
-                      className="flex items-center gap-3 px-4 py-2.5 hover:bg-purple-900/20 transition-colors group"
+                      className="flex items-center gap-3 px-4 py-2.5 hover:bg-rose-100 transition-colors group"
                     >
                       <span className="text-[10px] font-mono text-gray-600 w-6 shrink-0">{ch.ch}</span>
-                      <span className="text-xs text-gray-300 group-hover:text-white transition-colors flex-1 truncate">
+                      <span className="text-xs text-gray-600 group-hover:text-gray-900 transition-colors flex-1 truncate">
                         {ch.title}
                       </span>
                     </Link>
@@ -377,7 +377,7 @@ export default async function BookPage({ params }: Props) {
                   <div className="px-4 py-2.5 border-t border-site-border">
                     <Link
                       href={`/truyen/${slug}/chuong/${firstCh.ch}`}
-                      className="text-xs text-purple-400 hover:text-purple-200 transition-colors"
+                      className="text-xs text-pink-600 hover:text-pink-500 transition-colors"
                     >
                       Xem tất cả {chapters.length} chương →
                     </Link>
@@ -395,8 +395,8 @@ export default async function BookPage({ params }: Props) {
 /* ── Helpers ── */
 function SectionLabel({ id, text }: { id: string; text: string }) {
   return (
-    <h2 id={id} className="flex items-center gap-2 text-base font-bold text-white mb-3">
-      <span className="w-1 h-5 rounded-full bg-gradient-to-b from-purple-400 to-indigo-600 inline-block" />
+    <h2 id={id} className="flex items-center gap-2 text-base font-bold text-gray-900 mb-3">
+      <span className="w-1 h-5 rounded-full bg-gradient-to-b from-pink-400 to-rose-500 inline-block" />
       {text}
     </h2>
   );
@@ -410,7 +410,7 @@ function StatChip({
   const colorClass =
     color === 'emerald' ? 'bg-emerald-500/15 text-emerald-300 border-emerald-700/40' :
     color === 'sky'     ? 'bg-sky-500/15 text-sky-300 border-sky-700/40' :
-                          'bg-white/5 text-gray-300 border-white/10';
+                          'bg-gray-50 text-gray-600 border-white/10';
   return (
     <span className={`inline-flex items-center gap-1 text-xs px-2.5 py-1 rounded-full border font-medium ${colorClass}`}>
       {icon && <span aria-hidden="true">{icon}</span>}
