@@ -1,0 +1,17 @@
+FROM node:20-alpine
+
+# better-sqlite3 cần build tools (native addon)
+RUN apk add --no-cache python3 make g++
+
+WORKDIR /app
+
+# Mirror cấu trúc repo: server/ và public/ ở cùng cấp
+# để path.join(__dirname, '..', 'public') resolve đúng
+COPY server/package*.json ./server/
+RUN cd server && npm ci --omit=dev
+
+COPY server/ ./server/
+COPY public/ ./public/
+
+EXPOSE 3001
+CMD ["node", "server/index.js"]

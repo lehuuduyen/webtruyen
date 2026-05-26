@@ -1,0 +1,8 @@
+**/node_modules
+**/.next
+client/.next
+server/data.db-shm
+server/data.db-wal
+.git
+*.md
+dev.sh
