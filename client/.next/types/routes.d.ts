@@ -5,7 +5,7 @@ type AppRoutes = "/" | "/bang-xep-hang" | "/the-loai" | "/the-loai/[slug]" | "/t
 type PageRoutes = never
 type LayoutRoutes = "/" | "/the-loai"
 type RedirectRoutes = never
-type RewriteRoutes = "/admin/[[...path]]" | "/api/[[...path]]"
+type RewriteRoutes = "/admin/[[...path]]" | "/api/[[...path]]" | "/category-sitemap.xml" | "/sitemap.xml"
 type Routes = AppRoutes | PageRoutes | LayoutRoutes | RedirectRoutes | RewriteRoutes
 
 
@@ -14,6 +14,8 @@ interface ParamMap {
   "/admin/[[...path]]": { "path"?: string[]; }
   "/api/[[...path]]": { "path"?: string[]; }
   "/bang-xep-hang": {}
+  "/category-sitemap.xml": {}
+  "/sitemap.xml": {}
   "/the-loai": {}
   "/the-loai/[slug]": { "slug": string; }
   "/tim-kiem": {}

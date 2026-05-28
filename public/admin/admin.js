@@ -115,7 +115,7 @@
   }
 
   // ===== TAB NAVIGATION =====
-  const TABS = { overview: 'Tổng Quan', books: 'Quản Lý Sách', chapters: 'Quản Lý Chương', categories: 'Danh Mục', settings: 'Cài Đặt' };
+  const TABS = { overview: 'Tổng Quan', books: 'Quản Lý Sách', chapters: 'Quản Lý Chương', categories: 'Danh Mục', settings: 'Cài Đặt', truyenfull: 'TruyenFull Crawl', clone: 'Clone Sitemap' };
 
   function switchTab(tabId) {
     document.querySelectorAll('.nav-item').forEach(el => {
@@ -129,6 +129,8 @@
     if (tabId === 'books') renderBooks();
     if (tabId === 'chapters') renderChapterBookSelect();
     if (tabId === 'categories') renderCategories();
+    if (tabId === 'truyenfull') initTFTab();
+    if (tabId === 'clone') initCloneTab();
     if (window.innerWidth <= 900) document.getElementById('sidebar').classList.remove('open');
   }
 
@@ -872,6 +874,204 @@
     renderBooks();
     showToast('Đã xóa toàn bộ dữ liệu!', 'error');
   };
+
+  // ===== TRUYENFULL TAB =====
+  let tfPollTimer = null;
+  let tfTabReady = false;
+
+  function initTFTab() {
+    if (tfTabReady) return;
+    tfTabReady = true;
+    loadTFStatus();
+    document.getElementById('tfToggleBtn').addEventListener('click', tfToggle);
+    document.getElementById('tfResetBtn').addEventListener('click', tfReset);
+  }
+
+  async function loadTFStatus() {
+    const s = await api('GET', '/api/scrape/truyenfull/status');
+    renderTFState(s);
+    if (s.running) startTFPoll();
+  }
+
+  async function tfToggle() {
+    const btn = document.getElementById('tfToggleBtn');
+    btn.disabled = true;
+    const s = await api('GET', '/api/scrape/truyenfull/status');
+    if (s.running) {
+      await api('POST', '/api/scrape/truyenfull/stop');
+      stopTFPoll();
+      const s2 = await api('GET', '/api/scrape/truyenfull/status');
+      renderTFState(s2);
+    } else {
+      const r = await api('POST', '/api/scrape/truyenfull');
+      if (r.error) { showToast(r.error, 'error'); btn.disabled = false; return; }
+      renderTFState(r.state);
+      startTFPoll();
+    }
+    btn.disabled = false;
+  }
+
+  async function tfReset() {
+    if (!confirm('Đặt lại vị trí về đầu? Lần crawl tiếp sẽ bắt đầu từ trang 1.')) return;
+    await api('DELETE', '/api/scrape/truyenfull');
+    const s = await api('GET', '/api/scrape/truyenfull/status');
+    renderTFState(s);
+    showToast('Đã reset vị trí về đầu sitemap');
+  }
+
+  function startTFPoll() {
+    stopTFPoll();
+    tfPollTimer = setInterval(async () => {
+      const s = await api('GET', '/api/scrape/truyenfull/status');
+      renderTFState(s);
+      if (s.done) {
+        stopTFPoll();
+        if (!s.error) {
+          showToast(`Crawl xong: +${s.batchAdded} truyện mới!`);
+          loadBooks().then(() => renderOverview());
+        }
+      }
+    }, 1500);
+  }
+
+  function stopTFPoll() {
+    if (tfPollTimer) { clearInterval(tfPollTimer); tfPollTimer = null; }
+  }
+
+  function renderTFState(s) {
+    const btn = document.getElementById('tfToggleBtn');
+    const progressWrap = document.getElementById('tf-progress-wrap');
+    const progressBar = document.getElementById('tf-progress-bar');
+    const progressText = document.getElementById('tf-progress-text');
+    const lastResult = document.getElementById('tf-last-result');
+
+    document.getElementById('tf-stat-total').textContent = s.totalAdded || 0;
+    document.getElementById('tf-stat-batch').textContent = s.batchAdded || 0;
+    document.getElementById('tf-stat-pos').textContent = `Trang ${s.page || 1} / vị trí ${s.offset || 0}`;
+
+    if (s.running) {
+      btn.textContent = '⏹ Dừng Crawl';
+      btn.style.background = '#dc2626';
+      progressWrap.style.display = 'block';
+      lastResult.style.display = 'none';
+      const pct = s.pageTotal > 0 ? Math.round((s.current / s.pageTotal) * 100) : 0;
+      progressBar.style.width = pct + '%';
+      progressText.innerHTML = `Đang xử lý ${s.current}/${s.pageTotal} — <b>+${s.batchAdded}</b> mới | ${s.batchSkipped} bỏ qua | ${s.batchFailed} lỗi`;
+    } else {
+      btn.textContent = '▶ Crawl 100 Truyện Mới';
+      btn.style.background = '#2563eb';
+      progressWrap.style.display = 'none';
+      if (s.batchAdded > 0 || s.batchSkipped > 0 || s.error) {
+        lastResult.style.display = 'block';
+        if (s.error) {
+          lastResult.innerHTML = `<span style="color:#e84242">Lỗi: ${s.error}</span>`;
+        } else {
+          const stopNote = s.stopped ? ' (đã dừng sớm)' : '';
+          lastResult.innerHTML = `Lần cuối${stopNote}: <b>+${s.batchAdded}</b> truyện mới · ${s.batchSkipped} bỏ qua (đã có) · ${s.batchFailed} lỗi`;
+        }
+      }
+    }
+  }
+
+  // ===== CLONE SITEMAP =====
+  let bookScrapeTimer = null;
+  let chScrapeTimer = null;
+  let cloneTabReady = false;
+
+  function initCloneTab() {
+    if (cloneTabReady) return;
+    cloneTabReady = true;
+
+    // --- Book scraper ---
+    document.getElementById('startBookScrape').addEventListener('click', async function () {
+      const url = document.getElementById('book-sitemap-url').value.trim();
+      if (!url) return showToast('Nhập URL sitemap truyện!', 'error');
+      const limit = parseInt(document.getElementById('book-sitemap-limit').value) || 50;
+      const delayMs = parseInt(document.getElementById('book-sitemap-delay').value) || 1500;
+
+      const r = await api('POST', '/api/scrape', { sitemapUrl: url, limit, delayMs });
+      if (r.error) return showToast(r.error, 'error');
+
+      document.getElementById('startBookScrape').style.display = 'none';
+      document.getElementById('stopBookScrape').style.display = '';
+      document.getElementById('book-scrape-progress').style.display = 'block';
+      pollScrapeStatus('book');
+    });
+
+    document.getElementById('stopBookScrape').addEventListener('click', async function () {
+      clearInterval(bookScrapeTimer);
+      await api('DELETE', '/api/scrape');
+      finishScrape('book', null);
+    });
+
+    // --- Chapter scraper ---
+    document.getElementById('startChScrape').addEventListener('click', async function () {
+      const url = document.getElementById('ch-sitemap-url').value.trim();
+      if (!url) return showToast('Nhập URL sitemap chương!', 'error');
+      const limit = parseInt(document.getElementById('ch-sitemap-limit').value) || 100;
+      const delayMs = parseInt(document.getElementById('ch-sitemap-delay').value) || 1000;
+
+      const r = await api('POST', '/api/scrape/chapters', { sitemapUrl: url, limit, delayMs });
+      if (r.error) return showToast(r.error, 'error');
+
+      document.getElementById('startChScrape').style.display = 'none';
+      document.getElementById('stopChScrape').style.display = '';
+      document.getElementById('ch-scrape-progress').style.display = 'block';
+      pollScrapeStatus('ch');
+    });
+
+    document.getElementById('stopChScrape').addEventListener('click', async function () {
+      clearInterval(chScrapeTimer);
+      await api('DELETE', '/api/scrape/chapters');
+      finishScrape('ch', null);
+    });
+  }
+
+  function pollScrapeStatus(type) {
+    const endpoint = type === 'book' ? '/api/scrape/status' : '/api/scrape/chapters/status';
+    const timerId = type === 'book' ? 'bookScrapeTimer' : 'chScrapeTimer';
+    clearInterval(type === 'book' ? bookScrapeTimer : chScrapeTimer);
+
+    const timer = setInterval(async () => {
+      const s = await api('GET', endpoint);
+      updateScrapeUI(type, s);
+      if (s.done) {
+        clearInterval(timer);
+        finishScrape(type, s);
+        loadBooks().then(() => renderOverview());
+      }
+    }, 1200);
+
+    if (type === 'book') bookScrapeTimer = timer;
+    else chScrapeTimer = timer;
+  }
+
+  function updateScrapeUI(type, s) {
+    const bar = document.getElementById(type + '-progress-bar');
+    const status = document.getElementById(type + '-scrape-status');
+    if (!bar || !status) return;
+
+    const pct = s.total > 0 ? Math.round((s.current / s.total) * 100) : 0;
+    bar.style.width = pct + '%';
+
+    if (s.error) {
+      const escaped = s.error.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/\n/g,'<br>');
+      status.innerHTML = `<span style="color:#e84242">Lỗi: ${escaped}</span>`;
+    } else if (s.done) {
+      status.innerHTML = `Hoàn thành — Đã thêm: <b>${s.added}</b> | Bỏ qua: ${s.skipped} | Lỗi: ${s.failed} / Tổng: ${s.total}`;
+    } else {
+      status.innerHTML = `Đang xử lý ${s.current}/${s.total} — Đã thêm: <b>${s.added}</b> | Bỏ qua: ${s.skipped} | Lỗi: ${s.failed}`;
+    }
+  }
+
+  function finishScrape(type, s) {
+    document.getElementById('start' + (type === 'book' ? 'Book' : 'Ch') + 'Scrape').style.display = '';
+    document.getElementById('stop' + (type === 'book' ? 'Book' : 'Ch') + 'Scrape').style.display = 'none';
+    if (s) {
+      updateScrapeUI(type, s);
+      showToast(`Clone xong: +${s.added} ${type === 'book' ? 'truyện' : 'chương'}`, 'success');
+    }
+  }
 
   // ===== MODAL =====
   function openModal(id) { document.getElementById(id).classList.add('open'); }

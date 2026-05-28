@@ -1,4 +1,4 @@
-// File: /Users/duyenle/Desktop/AI/webtruyen/client/app/the-loai/page.tsx
+// File: /var/claude/webtruyen/client/app/the-loai/page.tsx
 import * as entry from '../../../../app/the-loai/page.js'
 import type { ResolvingMetadata, ResolvingViewport } from 'next/dist/lib/metadata/types/metadata-interface.js'
 

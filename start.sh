@@ -3,7 +3,7 @@
 echo "Starting WebTruyện..."
 
 # Start Express API on port 3001
-node server/index.js &
+SITE_URL=http://5.78.145.172 node server/index.js &
 API_PID=$!
 echo "API server started (PID $API_PID) on port 3001"
 
