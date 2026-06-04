@@ -30,6 +30,12 @@
     <a href="#" class="nav-item" data-tab="settings">
       <span class="nav-icon">⚙️</span><span>Cài Đặt</span>
     </a>
+    <a href="#" class="nav-item" data-tab="truyenfull">
+      <span class="nav-icon">🔥</span><span>TruyenFull</span>
+    </a>
+    <a href="#" class="nav-item" data-tab="clone">
+      <span class="nav-icon">🔄</span><span>Clone Sitemap</span>
+    </a>
   </nav>
   <div class="sidebar-bottom">
     <a href="../index.html" target="_blank" class="nav-item">
@@ -191,6 +197,136 @@
       <div id="category-tree" style="padding:4px 0">
         <div class="empty-msg" id="category-empty">Chưa có danh mục nào. Nhấn "+ Thêm Danh Mục".</div>
       </div>
+    </div>
+  </div>
+
+  <!-- ===== TRUYENFULL TAB ===== -->
+  <div class="tab-content" id="tab-truyenfull">
+    <div class="content-card" style="max-width:600px;margin:0 auto">
+      <div class="card-header">
+        <h3>🔥 Crawl từ TruyenFull.vn</h3>
+        <span style="font-size:12px;color:#888">Mỗi lần bấm crawl thêm 100 truyện mới, không duplicate</span>
+      </div>
+      <div style="padding:24px 20px">
+
+        <!-- Stats row -->
+        <div id="tf-stats" style="display:flex;gap:20px;margin-bottom:24px;flex-wrap:wrap">
+          <div style="flex:1;min-width:120px;background:#f0f7ff;border-radius:10px;padding:14px 16px;text-align:center">
+            <div style="font-size:28px;font-weight:700;color:#2563eb" id="tf-stat-total">0</div>
+            <div style="font-size:12px;color:#666;margin-top:2px">Tổng đã crawl</div>
+          </div>
+          <div style="flex:1;min-width:120px;background:#f0fdf4;border-radius:10px;padding:14px 16px;text-align:center">
+            <div style="font-size:28px;font-weight:700;color:#16a34a" id="tf-stat-batch">0</div>
+            <div style="font-size:12px;color:#666;margin-top:2px">Lần này</div>
+          </div>
+          <div style="flex:1;min-width:120px;background:#fafaf9;border-radius:10px;padding:14px 16px;text-align:center">
+            <div style="font-size:16px;font-weight:600;color:#555" id="tf-stat-pos">Trang 1 / vị trí 0</div>
+            <div style="font-size:12px;color:#666;margin-top:2px">Vị trí trong sitemap</div>
+          </div>
+        </div>
+
+        <!-- Toggle button -->
+        <button id="tfToggleBtn" style="width:100%;padding:16px;border-radius:12px;border:none;font-size:16px;font-weight:700;cursor:pointer;transition:all .2s;background:#2563eb;color:#fff;letter-spacing:.5px">
+          ▶ Crawl 100 Truyện Mới
+        </button>
+
+        <!-- Progress -->
+        <div id="tf-progress-wrap" style="display:none;margin-top:16px">
+          <div style="background:#e8eaf0;border-radius:6px;height:10px;overflow:hidden;margin-bottom:8px">
+            <div id="tf-progress-bar" style="background:#2563eb;height:100%;border-radius:6px;width:0%;transition:width .4s"></div>
+          </div>
+          <div id="tf-progress-text" style="font-size:13px;color:#555;line-height:1.6"></div>
+        </div>
+
+        <!-- Last result -->
+        <div id="tf-last-result" style="display:none;margin-top:12px;padding:12px 14px;background:#f8f9fa;border-radius:8px;font-size:13px;color:#444;line-height:1.8"></div>
+
+        <!-- Reset -->
+        <div style="margin-top:20px;border-top:1px solid #eee;padding-top:16px;display:flex;align-items:center;justify-content:space-between">
+          <span style="font-size:12px;color:#999">Đặt lại vị trí về đầu sitemap (trang 1)</span>
+          <button id="tfResetBtn" style="padding:6px 14px;border-radius:6px;border:1px solid #ddd;background:#fff;color:#e84242;font-size:12px;cursor:pointer">Reset vị trí</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== CLONE SITEMAP TAB ===== -->
+  <div class="tab-content" id="tab-clone">
+    <div class="settings-grid">
+
+      <div class="content-card" style="grid-column:1/-1;background:#fffbe6;border:1px solid #ffe58f">
+        <div style="padding:14px 20px;font-size:13px;line-height:1.7;color:#5a4500">
+          <b>⚠️ Lưu ý — Cloudflare:</b> Một số site (vd: <code>truyenqqko.com</code>) dùng Cloudflare nên trả về <b>HTTP 403</b>.
+          Để bypass, cài <b>FlareSolverr</b> (proxy chạy trình duyệt thật):
+          <pre style="background:#fff7d0;border-radius:4px;padding:8px 12px;margin:8px 0;overflow-x:auto;font-size:12px">docker run -d -p 8191:8191 ghcr.io/flaresolverr/flaresolverr:latest</pre>
+          Sau đó thêm vào file <code>.env</code> (hoặc <code>server/.env</code>):
+          <pre style="background:#fff7d0;border-radius:4px;padding:8px 12px;margin:8px 0;font-size:12px">FLARESOLVERR_URL=http://localhost:8191</pre>
+          Scraper sẽ tự dùng FlareSolverr khi gặp 403. Site không có Cloudflare (vd: <code>truyenfull.today</code>) hoạt động bình thường.
+        </div>
+      </div>
+
+      <div class="content-card">
+        <div class="card-header"><h3>📚 Clone Truyện từ Sitemap</h3></div>
+        <div style="padding:16px 20px">
+          <p style="color:#888;font-size:13px;margin-bottom:16px">Nhập URL sitemap danh sách truyện (<code>sitemap-comic-*.xml</code>). Scraper lấy tên, tác giả, ảnh bìa, mô tả.</p>
+          <div class="form-group">
+            <label>URL Sitemap Truyện</label>
+            <input type="text" id="book-sitemap-url" placeholder="https://example.com/sitemap-comic-new.xml" style="font-size:13px">
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label>Giới hạn (max truyện)</label>
+              <input type="number" id="book-sitemap-limit" value="50" min="1" max="2000">
+            </div>
+            <div class="form-group">
+              <label>Delay giữa request (ms)</label>
+              <input type="number" id="book-sitemap-delay" value="1500" min="300">
+            </div>
+          </div>
+          <div style="display:flex;gap:10px;margin-bottom:14px">
+            <button class="btn-primary" id="startBookScrape">▶ Bắt Đầu Clone</button>
+            <button class="btn-danger" id="stopBookScrape" style="display:none">⏹ Dừng</button>
+          </div>
+          <div id="book-scrape-progress" style="display:none">
+            <div style="background:#e8eaf0;border-radius:6px;height:10px;margin-bottom:8px;overflow:hidden">
+              <div id="book-progress-bar" style="background:#4a90d9;height:100%;border-radius:6px;width:0%;transition:width .4s"></div>
+            </div>
+            <div id="book-scrape-status" style="font-size:13px;color:#555;line-height:1.6"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="content-card">
+        <div class="card-header"><h3>📖 Clone Chương từ Sitemap</h3></div>
+        <div style="padding:16px 20px">
+          <p style="color:#888;font-size:13px;margin-bottom:16px">Nhập URL sitemap chứa các chương (<code>sitemap-chapter-*.xml</code>). Scraper lấy nội dung từng chương, tự tạo truyện nếu chưa có.</p>
+          <div class="form-group">
+            <label>URL Sitemap Chương</label>
+            <input type="text" id="ch-sitemap-url" placeholder="https://example.com/sitemap-chapter-2026-21.xml" style="font-size:13px">
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label>Giới hạn (max chương)</label>
+              <input type="number" id="ch-sitemap-limit" value="5000" min="1" max="50000">
+            </div>
+            <div class="form-group">
+              <label>Delay giữa request (ms)</label>
+              <input type="number" id="ch-sitemap-delay" value="1000" min="300">
+            </div>
+          </div>
+          <div style="display:flex;gap:10px;margin-bottom:14px">
+            <button class="btn-primary" id="startChScrape">▶ Bắt Đầu Clone</button>
+            <button class="btn-danger" id="stopChScrape" style="display:none">⏹ Dừng</button>
+          </div>
+          <div id="ch-scrape-progress" style="display:none">
+            <div style="background:#e8eaf0;border-radius:6px;height:10px;margin-bottom:8px;overflow:hidden">
+              <div id="ch-progress-bar" style="background:#4a90d9;height:100%;border-radius:6px;width:0%;transition:width .4s"></div>
+            </div>
+            <div id="ch-scrape-status" style="font-size:13px;color:#555;line-height:1.6"></div>
+          </div>
+        </div>
+      </div>
+
     </div>
   </div>
 

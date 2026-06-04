@@ -21,3 +21,4 @@ echo "Press Ctrl+C to stop all services."
 
 trap "kill $API_PID $NEXT_PID 2>/dev/null; exit" INT TERM
 wait
+#   docker run -d -p 8191:8191 ghcr.io/flaresolverr/flaresolverr:latest

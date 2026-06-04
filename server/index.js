@@ -1,5 +1,7 @@
 'use strict';
 
+try { require('dotenv').config({ path: require('path').join(__dirname, '.env') }); } catch {}
+
 const express = require('express');
 const path = require('path');
 const crypto = require('crypto');
@@ -141,6 +143,106 @@ app.use((req, res, next) => {
 });
 
 app.use(express.static(path.join(__dirname, '..', 'public')));
+
+// ===== SITEMAP HELPERS =====
+const SITE_URL = (process.env.SITE_URL || 'http://localhost:3000').replace(/\/$/, '');
+const SITEMAP_PER_PAGE = 500;
+
+function getISOWeek(date) {
+  const d = new Date(Date.UTC(date.getFullYear(), date.getMonth(), date.getDate()));
+  d.setUTCDate(d.getUTCDate() + 4 - (d.getUTCDay() || 7));
+  const yearStart = new Date(Date.UTC(d.getUTCFullYear(), 0, 1));
+  return `${d.getUTCFullYear()}-${Math.ceil((((d - yearStart) / 86400000) + 1) / 7)}`;
+}
+
+function xmlDate(iso) { return iso ? iso.substring(0, 10) : new Date().toISOString().substring(0, 10); }
+
+function escapeXml(s) {
+  return String(s || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+}
+
+function sendXml(res, xml) {
+  res.setHeader('Content-Type', 'application/xml; charset=UTF-8');
+  res.setHeader('Cache-Control', 'public, max-age=3600');
+  res.send(xml);
+}
+
+// ===== SITEMAP ROUTES =====
+// Sitemap index
+app.get('/sitemap.xml', (req, res) => {
+  const today = xmlDate(new Date().toISOString());
+  const bookCount = db.prepare('SELECT COUNT(*) as n FROM books').get().n;
+  const comicPages = Math.max(1, Math.ceil(bookCount / SITEMAP_PER_PAGE));
+  const chapterRows = db.prepare('SELECT DISTINCT created_at FROM chapters ORDER BY created_at DESC').all();
+  const weeks = [...new Set(chapterRows.map(r => getISOWeek(new Date(r.created_at))))];
+
+  const items = [
+    `  <sitemap><loc>${SITE_URL}/category-sitemap.xml</loc><lastmod>${today}</lastmod></sitemap>`,
+    ...Array.from({ length: comicPages }, (_, i) =>
+      `  <sitemap><loc>${SITE_URL}/sitemap-comic-${i + 1}.xml</loc><lastmod>${today}</lastmod></sitemap>`),
+    ...weeks.map(w =>
+      `  <sitemap><loc>${SITE_URL}/sitemap-chapter-${w}.xml</loc><lastmod>${today}</lastmod></sitemap>`),
+  ];
+
+  sendXml(res, `<?xml version="1.0" encoding="UTF-8"?>
+<sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+${items.join('\n')}
+</sitemapindex>`);
+});
+
+// Category sitemap
+app.get('/category-sitemap.xml', (req, res) => {
+  const cats = stmt.getAllCategories.all();
+  const urls = cats.map(c => `  <url>
+    <loc>${SITE_URL}/the-loai/${c.slug}</loc>
+    <changefreq>weekly</changefreq>
+    <priority>${c.parent_id ? '0.6' : '0.8'}</priority>
+  </url>`).join('\n');
+  sendXml(res, `<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+${urls}
+</urlset>`);
+});
+
+// Book/comic sitemap (paginated 500/page)
+app.get('/sitemap-comic-:page.xml', (req, res) => {
+  const page = Math.max(1, parseInt(req.params.page) || 1);
+  const books = db.prepare('SELECT * FROM books ORDER BY created_at DESC LIMIT ? OFFSET ?')
+    .all(SITEMAP_PER_PAGE, (page - 1) * SITEMAP_PER_PAGE);
+  if (!books.length) return res.status(404).end();
+  const urls = books.map(b => {
+    const img = b.img ? `\n    <image:image><image:loc>${escapeXml(b.img)}</image:loc></image:image>` : '';
+    return `  <url>
+    <loc>${SITE_URL}/truyen/${b.slug}</loc>
+    <lastmod>${xmlDate(b.created_at)}</lastmod>
+    <changefreq>${b.status === 'ongoing' ? 'daily' : 'monthly'}</changefreq>
+    <priority>0.9</priority>${img}
+  </url>`;
+  }).join('\n');
+  sendXml(res, `<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
+${urls}
+</urlset>`);
+});
+
+// Chapter sitemap by ISO year-week (e.g. sitemap-chapter-2026-21.xml)
+app.get('/sitemap-chapter-:yearweek.xml', (req, res) => {
+  const yw = req.params.yearweek;
+  const chapters = db.prepare('SELECT book_slug, ch, created_at FROM chapters').all()
+    .filter(r => getISOWeek(new Date(r.created_at)) === yw);
+  if (!chapters.length) return res.status(404).end();
+  const urls = chapters.map(c => `  <url>
+    <loc>${SITE_URL}/truyen/${c.book_slug}/chuong/${c.ch}</loc>
+    <lastmod>${xmlDate(c.created_at)}</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>`).join('\n');
+  sendXml(res, `<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+${urls}
+</urlset>`);
+});
 
 // ===== AUTH ROUTES =====
 app.post('/api/auth/login', (req, res) => {
@@ -535,6 +637,138 @@ app.post('/api/seed', requireAuth, (req, res) => {
     categories: subCats.length + 2,
     chapters: booksData.reduce((s, b) => s + Math.min(b.chapters, 5), 0),
   });
+});
+
+// ===== SCRAPE FROM SITEMAP =====
+let scrapeState = null;
+
+app.post('/api/scrape', requireAuth, async (req, res) => {
+  const { sitemapUrl, limit = 50, delayMs = 1500 } = req.body || {};
+  if (!sitemapUrl) return res.status(400).json({ error: 'sitemapUrl required' });
+  if (scrapeState && !scrapeState.done) return res.status(409).json({ error: 'Scrape đang chạy', status: scrapeState });
+
+  scrapeState = { sitemapUrl, started: new Date().toISOString(), done: false, added: 0, failed: 0, skipped: 0, total: 0, current: 0 };
+  res.json({ ok: true, message: 'Scrape đã bắt đầu', status: scrapeState });
+
+  const { run } = require('./scraper');
+  run({ sitemapUrl, limit: parseInt(limit) || 50, delayMs: parseInt(delayMs) || 1500, onProgress: s => { Object.assign(scrapeState, s); } })
+    .then(result => { Object.assign(scrapeState, result, { done: true, finishedAt: new Date().toISOString() }); })
+    .catch(err => { Object.assign(scrapeState, { done: true, error: err.message }); });
+});
+
+app.get('/api/scrape/status', requireAuth, (req, res) => {
+  res.json(scrapeState || { done: true });
+});
+
+app.delete('/api/scrape', requireAuth, (req, res) => {
+  scrapeState = null;
+  res.json({ ok: true });
+});
+
+// ===== SCRAPE CHAPTERS FROM SITEMAP =====
+let scrapeChapterState = null;
+
+app.post('/api/scrape/chapters', requireAuth, async (req, res) => {
+  const { sitemapUrl, limit = 5000, delayMs = 1000 } = req.body || {};
+  if (!sitemapUrl) return res.status(400).json({ error: 'sitemapUrl required' });
+  if (scrapeChapterState && !scrapeChapterState.done)
+    return res.status(409).json({ error: 'Scrape chương đang chạy', status: scrapeChapterState });
+
+  scrapeChapterState = { sitemapUrl, started: new Date().toISOString(), done: false, added: 0, failed: 0, skipped: 0, total: 0, current: 0 };
+  res.json({ ok: true, message: 'Scrape chương đã bắt đầu', status: scrapeChapterState });
+
+  const { runChapters } = require('./scraper');
+  runChapters({ sitemapUrl, limit: parseInt(limit) || 200, delayMs: parseInt(delayMs) || 1000, onProgress: s => { Object.assign(scrapeChapterState, s); } })
+    .then(result => { Object.assign(scrapeChapterState, result, { done: true, finishedAt: new Date().toISOString() }); })
+    .catch(err => { Object.assign(scrapeChapterState, { done: true, error: err.message }); });
+});
+
+app.get('/api/scrape/chapters/status', requireAuth, (req, res) => {
+  res.json(scrapeChapterState || { done: true });
+});
+
+app.delete('/api/scrape/chapters', requireAuth, (req, res) => {
+  scrapeChapterState = null;
+  res.json({ ok: true });
+});
+
+// ===== TRUYENFULL TARGETED CRAWL =====
+const TF_BASE = 'https://truyenfull.today';
+const TF_LISTING = `${TF_BASE}/danh-sach/truyen-moi/`;
+let tfState = null;
+let tfStopFlag = {};
+
+function tfGetSettings() {
+  const page   = parseInt(db.prepare("SELECT value FROM settings WHERE key='tf_page'").get()?.value   || '1');
+  const offset = parseInt(db.prepare("SELECT value FROM settings WHERE key='tf_offset'").get()?.value || '0');
+  const total  = parseInt(db.prepare("SELECT value FROM settings WHERE key='tf_total'").get()?.value  || '0');
+  return { page, offset, total };
+}
+function tfSaveSettings({ page, offset, total }) {
+  const ups = db.prepare('INSERT OR REPLACE INTO settings(key,value) VALUES(?,?)');
+  if (page   !== undefined) ups.run('tf_page',   String(page));
+  if (offset !== undefined) ups.run('tf_offset', String(offset));
+  if (total  !== undefined) ups.run('tf_total',  String(total));
+}
+
+app.post('/api/scrape/truyenfull', requireAuth, async (req, res) => {
+  if (tfState && !tfState.done) return res.status(409).json({ error: 'Đang chạy', state: tfState });
+
+  const { page, offset, total } = tfGetSettings();
+  tfStopFlag = { stop: false };
+  tfState = {
+    running: true, done: false, page, offset,
+    totalAdded: total, batchAdded: 0, batchSkipped: 0, batchFailed: 0,
+    current: 0, pageTotal: 0, started: new Date().toISOString(),
+  };
+  res.json({ ok: true, state: tfState });
+
+  const { runTargeted } = require('./scraper');
+
+  try {
+    const result = await runTargeted({
+      listingBaseUrl: TF_LISTING,
+      targetNew: 100,
+      startPage: page,
+      startOffset: offset,
+      delayMs: 1200,
+      stopFlag: tfStopFlag,
+      onProgress: s => Object.assign(tfState, {
+        batchAdded: s.added, batchSkipped: s.skipped, batchFailed: s.failed,
+        current: s.current, pageTotal: s.total,
+      }),
+    });
+
+    const newTotal = total + result.added;
+    tfSaveSettings({ page: result.nextPage, offset: result.nextOffset, total: newTotal });
+
+    Object.assign(tfState, {
+      done: true, running: false,
+      batchAdded: result.added, batchSkipped: result.skipped, batchFailed: result.failed,
+      totalAdded: newTotal, page: result.nextPage, offset: result.nextOffset,
+      stopped: !!tfStopFlag.stop, finishedAt: new Date().toISOString(),
+    });
+  } catch (err) {
+    Object.assign(tfState, { done: true, running: false, error: err.message });
+  }
+});
+
+app.post('/api/scrape/truyenfull/stop', requireAuth, (req, res) => {
+  tfStopFlag.stop = true;
+  res.json({ ok: true });
+});
+
+app.get('/api/scrape/truyenfull/status', requireAuth, (req, res) => {
+  if (tfState) return res.json(tfState);
+  const { page, offset, total } = tfGetSettings();
+  res.json({ done: true, running: false, page, offset, totalAdded: total });
+});
+
+app.delete('/api/scrape/truyenfull', requireAuth, (req, res) => {
+  tfStopFlag.stop = true;
+  tfState = null;
+  tfSaveSettings({ page: 1, offset: 0, total: 0 });
+  res.json({ ok: true });
 });
 
 // ===== HELPERS =====

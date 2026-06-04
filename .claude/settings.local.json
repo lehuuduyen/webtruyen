@@ -1,0 +1,21 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(echo \"---EXIT $?\")",
+      "Bash(curl -s http://localhost:3000/sitemap.xml)",
+      "Bash(curl *)",
+      "Bash(pm2 list *)",
+      "Bash(sudo bash -c 'echo \"SITE_URL=https://truyenfullai.com\" >> /www/wwwroot/truyenfullai.com/server/.env')",
+      "Bash(node -e \"require\\('dotenv'\\).config\\({ path: 'server/.env' }\\); console.log\\('SITE_URL:', process.env.SITE_URL\\)\")",
+      "Bash(/home/centos/.nvm/versions/node/v18.20.8-glibc217/bin/node -e \"require\\('./server/node_modules/dotenv'\\).config\\({ path: './server/.env' }\\); console.log\\('SITE_URL:', process.env.SITE_URL\\)\")",
+      "Bash(sudo /home/centos/.nvm/versions/node/v18.20.8-glibc217/bin/node /home/centos/.nvm/versions/node/v18.20.8-glibc217/lib/node_modules/pm2/bin/pm2 list)",
+      "Bash(sudo *)",
+      "Bash(node -e \"const cheerio = require\\('cheerio'\\); console.log\\('cheerio OK'\\);\")",
+      "Bash(node -e \"const { run } = require\\('./scraper'\\); console.log\\('scraper loaded OK'\\);\")",
+      "Read(//usr/local/bin/**)",
+      "Read(//home/centos/.nvm/versions/node/**)",
+      "Read(//root/.nvm/versions/**)",
+      "Bash(chmod 666 /www/wwwroot/truyenfullai.com/server/scraper.js)"
+    ]
+  }
+}
